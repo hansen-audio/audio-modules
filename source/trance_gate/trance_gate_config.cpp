@@ -122,14 +122,24 @@ static converter_list_type const convert_list = {{
     {   // convert_tags::percent
         /*to_physical   = */ [](real norm) { return percent_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return percent_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return percent_converter.to_string(phys); },
+        /*to_string     = */ [](real phys) { 
+                auto precisionFunc = [](auto value) -> i32 {
+                return value < 100. ? 2 : 1;
+            };
+            return percent_converter.to_string(phys, precisionFunc); 
+        },
         /*from_string   = */ [](string string) { return percent_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
     {   // convert_tags::contour
         /*to_physical   = */ [](real norm) { return contour_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return contour_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return contour_converter.to_string(phys); },
+        /*to_string     = */ [](real phys) {
+            auto precisionFunc = [](decltype(contour_converter)::value_type) -> i32 {
+                return 3;
+            };
+            return contour_converter.to_string(phys, precisionFunc); 
+        },
         /*from_string   = */ [](string string) { return contour_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
@@ -150,7 +160,12 @@ static converter_list_type const convert_list = {{
     {   // convert_tags::step_count
         /*to_physical   = */ [](real norm) { return step_count_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return step_count_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return step_count_converter.to_string(phys); },
+        /*to_string     = */ [](real phys) { 
+            auto precisionFunc = [](decltype(step_count_converter)::value_type) -> i32 {
+                return 0;
+            };
+            return step_count_converter.to_string(phys, precisionFunc);
+        },
         /*from_string   = */ [](string string) { return step_count_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return step_count_converter.to_physical(1.)
                                                     - step_count_converter.to_physical(0.); }
