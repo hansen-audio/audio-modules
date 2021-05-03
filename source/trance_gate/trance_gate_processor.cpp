@@ -200,7 +200,7 @@ bool tg_processor::process_audio(process_data& data)
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    // tg_effect.trigger(delay_len, fade_in_len);
+    // tg::trigger(tg_context, delay_len, fade_in_len);
 
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
