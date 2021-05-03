@@ -160,11 +160,13 @@ static converter_list_type const convert_list = {{
     {   // convert_tags::step_count
         /*to_physical   = */ [](real norm) { return step_count_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return step_count_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { 
-            auto precisionFunc = [](decltype(step_count_converter)::value_type) -> i32 {
+        /*to_string     = */ [](real phys) {
+            using val_type = decltype(step_count_converter)::value_type;
+            auto precisionFunc = [](val_type) -> i32 {
                 return 0;
             };
-            return step_count_converter.to_string(phys, precisionFunc);
+            auto rounded = static_cast<val_type>(static_cast<i32>(phys));
+            return step_count_converter.to_string(rounded, precisionFunc);
         },
         /*from_string   = */ [](string string) { return step_count_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return step_count_converter.to_physical(1.)
