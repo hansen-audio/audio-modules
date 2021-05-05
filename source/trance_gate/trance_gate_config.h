@@ -230,7 +230,7 @@ struct config
             /*short_name = */         "Lgt",
             /*units = */              "steps",
             /*param_tag = */          param_tags::step_count,
-            /*default_normalised = */ 0.249,
+            /*default_normalised = */ 0.25,
             /*convert_tag = */        convert_tags::step_count
         },
         {
@@ -246,7 +246,7 @@ struct config
             /*short_name = */         "Wid",
             /*units = */              "%",
             /*param_tag = */          param_tags::width,
-            /*default_normalised = */ 0.,
+            /*default_normalised = */ 1.,
             /*convert_tag = */        convert_tags::percent
         },
         {
