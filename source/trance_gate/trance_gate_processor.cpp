@@ -90,7 +90,7 @@ void update_parameter(modulation_data::pin_data const& pin,
         case tg_config::param_tags::step_ri_30:
         case tg_config::param_tags::step_ri_31:
         case tg_config::param_tags::step_ri_32: {
-            constexpr i32 RIGHT_CH_IDX = 0;
+            constexpr i32 RIGHT_CH_IDX = 1;
 
             const auto tag = pin.tag - tg_config::param_tags::step_ri_01;
             tg::set_step(tg_context, RIGHT_CH_IDX, tag, pin.value);
