@@ -188,6 +188,25 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_context)
 }
 
 //-----------------------------------------------------------------------------
+void process_audio_buffers(fx_collection::trance_gate::context& tg_context, process_data& data)
+{
+    using tg          = fx_collection::trance_gate;
+    using audio_frame = fx_collection::audio_frame;
+    constexpr i32 L   = 0;
+    constexpr i32 R   = 1;
+
+    audio_frame frame = fx_collection::zero_audio_frame;
+    for (mut_i32 s = 0; s < data.num_samples; ++s)
+    {
+        frame.data[L] = data.inputs[0][L][s];
+        frame.data[R] = data.inputs[0][R][s];
+        tg::process(tg_context, frame, frame);
+        data.outputs[0][L][s] = frame.data[L];
+        data.outputs[0][R][s] = frame.data[R];
+    }
+}
+
+//-----------------------------------------------------------------------------
 } // namespace
 
 /**
@@ -231,15 +250,7 @@ bool tg_processor::process_audio(process_data& data)
         tg::trigger(tg_context, delay_len, fade_in_len);
     }
 
-    audio_frame frame = fx_collection::zero_audio_frame;
-    for (mut_i32 s = 0; s < data.num_samples; ++s)
-    {
-        frame.data[0] = data.inputs[0][0][s];
-        frame.data[1] = data.inputs[0][1][s];
-        tg::process(tg_context, frame, frame);
-        data.outputs[0][0][s] = frame.data[0];
-        data.outputs[0][1][s] = frame.data[1];
-    }
+    process_audio_buffers(tg_context, data);
 
     return true;
 }
