@@ -269,10 +269,10 @@ void tg_processor::update_param(tag_param param_tag, real value)
     switch (param_tag)
     {
         case config::param_tags::fade_in:
-            fade_in_len = value;
+            fade_in_len = trance_gate::config::get_delay_fade_len(value);
             break;
         case config::param_tags::delay:
-            delay_len = value;
+            delay_len = trance_gate::config::get_delay_fade_len(value);
             break;
         default:
             break;
