@@ -5,11 +5,20 @@
 The audio-modules library wraps the effects of the fx-collection library into a uniform interface. Like this all the effects can be used the same way from outside. 
 
 This includes
-* Querying parameter informations
-* Setting parameters in a normalised fashion
-* Coverting parameters between normalised, physcial and string representation
+* Querying parameter information
+* Setting parameters in a normalised way
+* Converting parameters between normalised, physcial and string representation
 * Letting modules process audio buffers 
 
+### Dependency map
+
+```
+audio-modules
++-- fx-collection
+|   +-- dsp-tool-box
+|
++-- param-tool-box
+```
 
 ## Audio Module
 
@@ -26,17 +35,15 @@ There are four ```convert_funcs``` methods for each module type which can be use
 * physcial ```to_string```
 * ```from_string``` to physcial
 
-Furthermore there is method ```num_steps``` which returns the number of steps of a parameter.
+Furthermore there is method ```num_steps``` which returns the number of steps of a parameter. It can be used for VST3's ```ParameterInfo``` for instance.
 
-> The ```num_steps``` function can be used for VST3's ```ParameterInfo```.
-
-> Converters can be queried via the ```module_factory```
+Converters can be queried via the ```module_factory```
 
 ## Parameter Info
 
 The ```param_info``` struct contains information about a parameter. 
 
-> Parameter infos can be queried via the ```module_factory```
+Parameter infos can be queried via the ```module_factory```
 
 ## License
 
