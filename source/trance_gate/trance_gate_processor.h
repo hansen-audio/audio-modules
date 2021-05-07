@@ -19,8 +19,6 @@ class tg_processor : public module
 {
 public:
     //-------------------------------------------------------------------------
-    using audio_frame = fx_collection::audio_frame;
-
     tg_processor();
 
     bool process_audio(process_data& data) override;
@@ -35,7 +33,6 @@ private:
     silence_detection::context sd_context;
     bool needs_trigger = true;
 
-    audio_frame frame                              = fx_collection::zero_audio_frame;
     fx_collection::trance_gate::context tg_context = fx_collection::trance_gate::create();
 };
 

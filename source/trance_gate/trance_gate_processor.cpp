@@ -170,11 +170,12 @@ void update_parameters(modulation_data const& mod_data,
 }
 
 //-----------------------------------------------------------------------------
-bool is_silent_input(process_data& data,
-                     tg_processor::audio_frame& frame,
-                     silence_detection::context& sd_context)
+bool is_silent_input(process_data& data, silence_detection::context& sd_context)
 {
-    bool is_silent = false;
+    using audio_frame = fx_collection::audio_frame;
+
+    audio_frame frame = fx_collection::zero_audio_frame;
+    bool is_silent    = false;
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
         frame.data[0] = data.inputs[0][0][s];
@@ -206,7 +207,8 @@ tg_processor::tg_processor()
 //-----------------------------------------------------------------------------
 bool tg_processor::process_audio(process_data& data)
 {
-    using tg = fx_collection::trance_gate;
+    using tg          = fx_collection::trance_gate;
+    using audio_frame = fx_collection::audio_frame;
 
     update_parameters(data.mod_data, tg_context, [this](tag_param param_tag, real value) {
         update_param(param_tag, value);
@@ -217,7 +219,7 @@ bool tg_processor::process_audio(process_data& data)
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    if (is_silent_input(data, frame, sd_context))
+    if (is_silent_input(data, sd_context))
     {
         needs_trigger = true;
         return true;
@@ -229,6 +231,7 @@ bool tg_processor::process_audio(process_data& data)
         tg::trigger(tg_context, delay_len, fade_in_len);
     }
 
+    audio_frame frame = fx_collection::zero_audio_frame;
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
         frame.data[0] = data.inputs[0][0][s];
