@@ -138,7 +138,7 @@ void update_parameter(modulation_data::pin_data const& pin,
 
             real val = tg_config::get_delay_fade_len(conv_funcs.to_physical(pin.value));
 
-            func(pin.tag, pin.value);
+            func(pin.tag, val);
             break;
         }
         case tg_config::param_tags::delay: {
@@ -146,7 +146,7 @@ void update_parameter(modulation_data::pin_data const& pin,
             static auto const& conv_funcs = tg_config::get_convert_functions(info.convert_tag);
             real val = tg_config::get_delay_fade_len(conv_funcs.to_physical(pin.value));
 
-            func(pin.tag, pin.value);
+            func(pin.tag, val);
             break;
         }
         default:
@@ -269,10 +269,10 @@ void tg_processor::update_param(tag_param param_tag, real value)
     switch (param_tag)
     {
         case config::param_tags::fade_in:
-            fade_in_len = trance_gate::config::get_delay_fade_len(value);
+            fade_in_len = value;
             break;
         case config::param_tags::delay:
-            delay_len = trance_gate::config::get_delay_fade_len(value);
+            delay_len = value;
             break;
         default:
             break;
