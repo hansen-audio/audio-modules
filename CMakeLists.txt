@@ -17,6 +17,8 @@ add_library(audio-modules STATIC
     source/trance_gate/trance_gate_config.h
     source/trance_gate/trance_gate_processor.cpp
     source/trance_gate/trance_gate_processor.h
+    source/trance_gate/silence_detection.cpp
+    source/trance_gate/silence_detection.h
 )
 
 target_include_directories(audio-modules

@@ -5,6 +5,7 @@
 #include "ha/audio_modules/module.h"
 #include "ha/audio_modules/types.h"
 #include "ha/fx_collection/trance_gate.h"
+#include "silence_detection.h"
 
 namespace ha {
 namespace audio_modules {
@@ -29,6 +30,8 @@ private:
 
     mut_real delay_len   = 0.;
     mut_real fade_in_len = 0.;
+    silence_detection::context sd_context;
+    bool needs_trigger = true;
 
     fx_collection::audio_frame frame               = fx_collection::zero_audio_frame;
     fx_collection::trance_gate::context tg_context = fx_collection::trance_gate::create();

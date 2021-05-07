@@ -200,7 +200,11 @@ bool tg_processor::process_audio(process_data& data)
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    // tg::trigger(tg_context, delay_len, fade_in_len);
+    if (needs_trigger)
+    {
+        needs_trigger = false;
+        tg::trigger(tg_context, delay_len, fade_in_len);
+    }
 
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
@@ -209,6 +213,9 @@ bool tg_processor::process_audio(process_data& data)
         tg::process(tg_context, frame, frame);
         data.outputs[0][0][s] = frame.data[0];
         data.outputs[0][1][s] = frame.data[1];
+
+        bool const is_silent = silence_detection::process(sd_context, frame);
+        needs_trigger        = is_silent;
     }
 
     return true;
@@ -220,6 +227,8 @@ void tg_processor::setup_processing(process_setup& setup)
     using tg = fx_collection::trance_gate;
 
     tg::set_sample_rate(tg_context, setup.sample_rate);
+
+    sd_context = silence_detection::create(setup.sample_rate, 1.);
 }
 
 //-----------------------------------------------------------------------------
