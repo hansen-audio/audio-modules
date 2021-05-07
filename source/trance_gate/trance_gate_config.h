@@ -95,7 +95,6 @@ struct config
             width,
             fade_in,
             delay,
-            active,
             count
         };
     };
@@ -114,7 +113,6 @@ struct config
             delay_fade_length,
             step_count,
             mono_stereo,
-            on_off,
             count
         };
     };
@@ -264,15 +262,7 @@ struct config
             /*param_tag = */          param_tags::delay,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::delay_fade_length
-        },
-        {
-            /*name = */               "Active",
-            /*short_name = */         "Act",
-            /*units = */              "",
-            /*param_tag = */          param_tags::active,
-            /*default_normalised = */ 1.,
-            /*convert_tag = */        convert_tags::on_off
-        },
+        }
     }};
     // clang-format on
 

@@ -178,13 +178,6 @@ static converter_list_type const convert_list = {{
         /*to_string     = */ [](real phys) { return mono_mode_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return mono_mode_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return mono_mode_strings.size() - 1; }
-    },
-    {   // convert_tags::on_off
-        /*to_physical   = */ [](real norm) { return on_off_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return on_off_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return on_off_converter.to_string(phys); },
-        /*from_string   = */ [](string string) { return on_off_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return on_off_strings.size() - 1; }
     }
 }};
 // clang-format on

@@ -149,9 +149,6 @@ void update_parameter(modulation_data::pin_data const& pin,
             func(pin.tag, pin.value);
             break;
         }
-        case tg_config::param_tags::active: {
-            break;
-        }
         default:
             assert(true);
     }
