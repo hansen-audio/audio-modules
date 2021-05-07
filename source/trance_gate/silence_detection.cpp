@@ -22,9 +22,16 @@ bool silence_detection::process(context& ctx, fx_collection::audio_frame const& 
 
     value_type sum = 0.;
     for (const auto& sample : frame.data)
-        sum += abs(sample);
+    {
+        value_type const abs_value = std::abs(value_type(sample));
+        sum += abs_value;
+    }
 
-    ctx.sample_count += sum < THRESHOLD ? 1 : 0;
+    if (sum < THRESHOLD)
+        ctx.sample_count += 1;
+    else
+        ctx.sample_count = 0;
+
     auto const duraion_exceeded = ctx.sample_count > ctx.duration_in_samples;
     return duraion_exceeded;
 }
