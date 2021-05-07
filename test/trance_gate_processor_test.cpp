@@ -95,4 +95,19 @@ TEST(audio_modules_factory_test, test_trance_gate_mod_infos)
 }
 
 //-----------------------------------------------------------------------------
+TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
+{
+    using amf             = audio_modules::module_factory;
+    const auto mod_infos  = amf::param_infos(audio_modules::module_tags::TRANCE_GATE);
+    const auto converters = amf::convert_funcs(audio_modules::module_tags::TRANCE_GATE);
+    auto const converter =
+        converters.at(audio_modules::trance_gate::config::convert_tags::step_count);
+
+    const auto phys   = converter.to_physical(0.0322);
+    int const rounded = static_cast<int>(phys);
+    int rounded_2     = phys;
+    EXPECT_TRUE(rounded == 1);
+}
+
+//-----------------------------------------------------------------------------
 } // namespace
