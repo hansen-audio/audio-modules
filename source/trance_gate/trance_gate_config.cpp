@@ -53,6 +53,11 @@ static constexpr std::array on_off_strings = {
 };
 
 //-----------------------------------------------------------------------------
+static constexpr std::array sync_mode_strings = {
+    "Free", "Tempo", "Project",
+};
+
+//-----------------------------------------------------------------------------
 // A speed value is the length of one step in seconds.
 static std::array const speed_strings = {
     "1/128",  "1/64",  "1/32",  "1/16",  "1/8",  "1/4",  "1/2",  "1",
@@ -99,6 +104,7 @@ using lin_type            = ptb::convert::linear<mut_real>;
 using speed_type          = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
 using dly_fad_type        = ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
 using mono_mode_type      = ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
+using sync_mode_type      = ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
 using on_off_type         = ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
 using converter_list_type = std::array<const convert_funcs, config::convert_tags::count>;
 
@@ -109,6 +115,7 @@ static dly_fad_type const delay_fade_converter(delay_fade_len_strings);
 static lin_type const step_count_converter(1, 32);
 static mono_mode_type const mono_mode_converter(mono_mode_strings);
 static on_off_type const on_off_converter(on_off_strings);
+static sync_mode_type const sync_mode_converter(sync_mode_strings);
 
 // clang-format off
 static converter_list_type const convert_list = {{
@@ -178,6 +185,13 @@ static converter_list_type const convert_list = {{
         /*to_string     = */ [](real phys) { return mono_mode_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return mono_mode_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return mono_mode_strings.size() - 1; }
+    },
+    {   // convert_tags::sync_mode
+        /*to_physical   = */ [](real norm) { return sync_mode_converter.to_physical(norm); },
+        /*to_normalised = */ [](real phys) { return sync_mode_converter.to_normalized(phys); },
+        /*to_string     = */ [](real phys) { return sync_mode_converter.to_string(phys); },
+        /*from_string   = */ [](string string) { return sync_mode_converter.from_string(string); },
+        /*num_steps     = */ []() -> i32   { return sync_mode_strings.size() - 1; }
     }
 }};
 // clang-format on

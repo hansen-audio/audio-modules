@@ -95,6 +95,7 @@ struct config
             width,
             fade_in,
             delay,
+            sync,
             count
         };
     };
@@ -113,6 +114,7 @@ struct config
             delay_fade_length,
             step_count,
             mono_stereo,
+            sync_mode,
             count
         };
     };
@@ -262,7 +264,15 @@ struct config
             /*param_tag = */          param_tags::delay,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::delay_fade_length
-        }
+        }//,
+        // {
+        //     /*name = */               "Sync",
+        //     /*short_name = */         "Syn",
+        //     /*units = */              "",
+        //     /*param_tag = */          param_tags::sync,
+        //     /*default_normalised = */ 0.,
+        //     /*convert_tag = */        convert_tags::sync_mode
+        // }
     }};
     // clang-format on
 
