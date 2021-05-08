@@ -95,7 +95,7 @@ struct config
             width,
             fade_in,
             delay,
-            sync,
+            // sync,
             count
         };
     };
