@@ -215,7 +215,7 @@ tg_processor::tg_processor()
     for (param_info const& info : config::param_list)
     {
         modulation_data::pin_data pin{info.param_tag, info.default_normalised};
-        update_parameter(pin, tg_context, [this](tag_param param_tag, real value) {
+        update_parameter(pin, tg_context, [this](tag_type param_tag, real value) {
             update_param(param_tag, value);
         });
     }
@@ -227,7 +227,7 @@ bool tg_processor::process_audio(process_data& data)
     using tg          = fx_collection::trance_gate;
     using audio_frame = fx_collection::audio_frame;
 
-    update_parameters(data.mod_data, tg_context, [this](tag_param param_tag, real value) {
+    update_parameters(data.mod_data, tg_context, [this](tag_type param_tag, real value) {
         update_param(param_tag, value);
     });
 
@@ -265,7 +265,7 @@ void tg_processor::setup_processing(process_setup& setup)
 }
 
 //-----------------------------------------------------------------------------
-void tg_processor::update_param(tag_param param_tag, real value)
+void tg_processor::update_param(tag_type param_tag, real value)
 {
     switch (param_tag)
     {

@@ -21,7 +21,7 @@ struct config
      */
     struct param_tags
     {
-        enum : tag_param
+        enum : tag_type
         {
             step_le_01 = 0,
             step_le_02,
@@ -105,7 +105,7 @@ struct config
      */
     struct convert_tags
     {
-        enum : tag_convert
+        enum : tag_type
         {
             normalised = 0,
             percent,
@@ -279,7 +279,7 @@ struct config
     static_assert(param_tags::count == param_list.size(),
                   "The param_list does not contain all parameter definitions!");
 
-    static convert_funcs const& get_convert_functions(tag_convert convert_tag);
+    static convert_funcs const& get_convert_functions(tag_type convert_tag);
     static real get_speed(real value);
     static real get_delay_fade_len(real value);
 };

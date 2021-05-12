@@ -26,7 +26,7 @@ public:
 
     //-------------------------------------------------------------------------
 private:
-    void update_param(tag_param param_tag, real value);
+    void update_param(tag_type param_tag, real value);
 
     mut_real delay_len   = 0.;
     mut_real fade_in_len = 0.;

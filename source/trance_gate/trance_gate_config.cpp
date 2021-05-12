@@ -199,7 +199,7 @@ static converter_list_type const convert_list = {{
 static_assert(convert_list.size() == config::convert_tags::count);
 
 //-----------------------------------------------------------------------------
-convert_funcs const& config::get_convert_functions(tag_convert convert_tag)
+convert_funcs const& config::get_convert_functions(tag_type convert_tag)
 {
     return convert_list.at(convert_tag);
 }

@@ -13,15 +13,15 @@ namespace audio_modules {
  */
 struct param_info
 {
-    static constexpr tag_param INVALID_PARAM_TAG     = -1;
-    static constexpr tag_convert INVALID_CONVERT_TAG = -1;
+    static constexpr tag_type INVALID_PARAM_TAG   = -1;
+    static constexpr tag_type INVALID_CONVERT_TAG = -1;
 
     string_view name;
     string_view short_name;
     string_view units;
-    tag_param param_tag     = INVALID_PARAM_TAG;
+    tag_type param_tag      = INVALID_PARAM_TAG;
     real default_normalised = 0.;
-    tag_convert convert_tag = INVALID_CONVERT_TAG;
+    tag_type convert_tag    = INVALID_CONVERT_TAG;
 };
 
 //-----------------------------------------------------------------------------

@@ -21,11 +21,8 @@ using mut_i64 = std::remove_const<i64>::type;
 using real     = float const;
 using mut_real = std::remove_const<real>::type;
 
-using tag_param     = i32;
-using mut_tag_param = mut_i32;
-
-using tag_convert     = i32;
-using mut_tag_convert = mut_i32;
+using tag_type     = i32;
+using mut_tag_type = mut_i32;
 
 using string_view = std::string_view const;
 
