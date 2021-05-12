@@ -32,8 +32,8 @@ bool silence_detection::process(context& ctx, fx_collection::audio_frame const& 
     else
         ctx.sample_count = 0;
 
-    auto const duraion_exceeded = ctx.sample_count > ctx.duration_in_samples;
-    return duraion_exceeded;
+    auto const duration_exceeded = ctx.sample_count > ctx.duration_in_samples;
+    return duration_exceeded;
 }
 
 //-----------------------------------------------------------------------------
