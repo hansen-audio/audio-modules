@@ -31,8 +31,7 @@ using string = std::string const;
 using param_infos_list   = std::vector<struct param_info>;
 using convert_funcs_list = std::vector<struct convert_funcs>;
 
-using sample  = mut_real;
-using tag_pin = i32;
+using sample = mut_real;
 
 using allocator_r16 = alignment::aligned_allocator<sample, 16>;
 using audio_channel = std::vector<sample, allocator_r16>;

@@ -15,8 +15,8 @@ struct modulation_data
 {
     struct pin_data
     {
-        tag_pin tag = -1;
-        real value  = 0.;
+        tag_type tag = -1;
+        real value   = 0.;
     };
 
     using pin_data_list = std::vector<pin_data>;
