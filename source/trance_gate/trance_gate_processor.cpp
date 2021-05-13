@@ -114,7 +114,7 @@ void update_parameter(modulation_data::pin_data const& pin,
 
             auto const step_len = tg_config::get_speed(conv_funcs.to_physical(pin.value));
 
-            tg::set_step_length(tg_context, step_len);
+            tg::set_step_len(tg_context, step_len);
             break;
         }
         case tg_config::param_tags::step_count: {
