@@ -133,6 +133,10 @@ void update_parameter(modulation_data::pin_data const& pin,
             tg::set_width(tg_context, pin.value);
             break;
         }
+        case tg_config::param_tags::shuffle: {
+            tg::set_shuffle(tg_context, pin.value);
+            break;
+        }
         case tg_config::param_tags::fade_in: {
             static auto constexpr info = tg_config::param_list.at(tg_config::param_tags::fade_in);
             static auto const& conv_funcs = tg_config::get_convert_functions(info.convert_tag);

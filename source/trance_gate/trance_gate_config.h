@@ -95,6 +95,7 @@ struct config
             width,
             fade_in,
             delay,
+            shuffle,
             // sync,
             count
         };
@@ -264,6 +265,14 @@ struct config
             /*param_tag = */          param_tags::delay,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::delay_fade_length
+        },
+        {
+            /*name = */               "Shuffle",
+            /*short_name = */         "Shf",
+            /*units = */              "%",
+            /*param_tag = */          param_tags::shuffle,
+            /*default_normalised = */ 0.,
+            /*convert_tag = */        convert_tags::percent
         }//,
         // {
         //     /*name = */               "Sync",
