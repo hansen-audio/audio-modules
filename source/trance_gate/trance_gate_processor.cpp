@@ -134,7 +134,7 @@ void update_parameter(modulation_data::pin_data const& pin,
             break;
         }
         case tg_config::param_tags::shuffle: {
-            tg::set_shuffle(tg_context, pin.value);
+            tg::set_shuffle_amount(tg_context, pin.value);
             break;
         }
         case tg_config::param_tags::fade_in: {
