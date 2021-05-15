@@ -14,7 +14,8 @@ namespace audio_modules {
 template <typename AudioModuleConfig>
 static const param_infos_list build_param_infos()
 {
-    return {AudioModuleConfig::param_list.begin(), AudioModuleConfig::param_list.end()};
+    return {AudioModuleConfig::param_list.begin(),
+            AudioModuleConfig::param_list.end()};
 }
 
 //-----------------------------------------------------------------------------

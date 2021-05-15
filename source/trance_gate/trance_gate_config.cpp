@@ -98,15 +98,20 @@ static_assert(speed_values.size() == speed_strings.size());
 
 //-----------------------------------------------------------------------------
 // clang-format on
-using percent_type        = ptb::convert::percent<mut_real>;
-using log_type            = ptb::convert::logarithmic<mut_real>;
-using lin_type            = ptb::convert::linear<mut_real>;
-using speed_type          = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
-using dly_fad_type        = ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
-using mono_mode_type      = ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
-using sync_mode_type      = ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
-using on_off_type         = ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
-using converter_list_type = std::array<const convert_funcs, config::convert_tags::count>;
+using percent_type = ptb::convert::percent<mut_real>;
+using log_type     = ptb::convert::logarithmic<mut_real>;
+using lin_type     = ptb::convert::linear<mut_real>;
+using speed_type = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
+using dly_fad_type =
+    ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
+using mono_mode_type =
+    ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
+using sync_mode_type =
+    ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
+using on_off_type =
+    ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
+using converter_list_type =
+    std::array<const convert_funcs, config::convert_tags::count>;
 
 static percent_type const percent_converter;
 static log_type const contour_converter(4., 0.001, 0.25);

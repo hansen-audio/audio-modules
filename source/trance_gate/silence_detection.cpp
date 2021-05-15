@@ -8,16 +8,18 @@ namespace audio_modules {
 namespace trance_gate {
 
 //-----------------------------------------------------------------------------
-silence_detection::context silence_detection::create(real sample_rate, real duration_in_seconds)
+silence_detection::context silence_detection::create(real sample_rate,
+                                                     real duration_in_seconds)
 {
     context ctx{sample_rate * duration_in_seconds};
     return ctx;
 }
 
 //-----------------------------------------------------------------------------
-bool silence_detection::process(context& ctx, fx_collection::audio_frame const& frame)
+bool silence_detection::process(context& ctx,
+                                fx_collection::audio_frame const& frame)
 {
-    using value_type         = decltype(fx_collection::audio_frame::data)::value_type;
+    using value_type = decltype(fx_collection::audio_frame::data)::value_type;
     constexpr auto THRESHOLD = 1e-22f;
 
     value_type sum = 0.;

@@ -33,7 +33,8 @@ private:
     silence_detection::context sd_context;
     bool needs_trigger = true;
 
-    fx_collection::trance_gate::context tg_context = fx_collection::trance_gate::create();
+    fx_collection::trance_gate::context tg_context =
+        fx_collection::trance_gate::create();
 };
 
 //-----------------------------------------------------------------------------
