@@ -7,9 +7,7 @@
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 
-namespace ha {
-namespace audio_modules {
-namespace trance_gate {
+namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 /**
@@ -38,6 +36,4 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-} // namespace trance_gate
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules::trance_gate

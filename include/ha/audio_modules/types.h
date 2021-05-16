@@ -8,8 +8,7 @@
 #include <string_view>
 #include <vector>
 
-namespace ha {
-namespace audio_modules {
+namespace ha::audio_modules {
 
 //------------------------------------------------------------------------
 using i32     = std::int32_t const;
@@ -39,5 +38,4 @@ using audio_bus     = std::vector<audio_channel>;
 using audio_busses  = std::vector<audio_bus>;
 
 //------------------------------------------------------------------------
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules

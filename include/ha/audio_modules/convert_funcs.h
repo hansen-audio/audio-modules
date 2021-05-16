@@ -5,8 +5,7 @@
 #include "ha/audio_modules/types.h"
 #include <functional>
 
-namespace ha {
-namespace audio_modules {
+namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -28,5 +27,4 @@ struct convert_funcs
 };
 
 //-----------------------------------------------------------------------------
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules

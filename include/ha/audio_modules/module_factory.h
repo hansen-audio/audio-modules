@@ -9,8 +9,7 @@
 #include "ha/audio_modules/types.h"
 #include <memory>
 
-namespace ha {
-namespace audio_modules {
+namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 using audio_module_ptr = std::unique_ptr<module>;
@@ -27,5 +26,4 @@ struct module_factory
 };
 
 //-----------------------------------------------------------------------------
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules

@@ -8,9 +8,7 @@
 #include "ha/param_tool_box/convert/percent.h"
 #include "ha/param_tool_box/convert/string_list.h"
 
-namespace ha {
-namespace audio_modules {
-namespace trance_gate {
+namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 // clang-format off
@@ -224,6 +222,4 @@ real config::get_delay_fade_len(real value)
 }
 
 //-----------------------------------------------------------------------------
-} // namespace trance_gate
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules::trance_gate

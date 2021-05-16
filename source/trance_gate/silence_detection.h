@@ -5,9 +5,7 @@
 #include "ha/audio_modules/types.h"
 #include "ha/fx_collection/types.h"
 
-namespace ha {
-namespace audio_modules {
-namespace trance_gate {
+namespace ha::audio_modules::trance_gate {
 
 /**
  * @brief Detecting silence
@@ -26,6 +24,4 @@ struct silence_detection final
 };
 
 //-----------------------------------------------------------------------------
-} // namespace trance_gate
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules::trance_gate

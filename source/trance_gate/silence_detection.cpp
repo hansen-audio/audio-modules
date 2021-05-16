@@ -3,9 +3,7 @@
 #include "silence_detection.h"
 #include <cmath>
 
-namespace ha {
-namespace audio_modules {
-namespace trance_gate {
+namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 silence_detection::context silence_detection::create(real sample_rate,
@@ -39,6 +37,4 @@ bool silence_detection::process(context& ctx,
 }
 
 //-----------------------------------------------------------------------------
-} // namespace trance_gate
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules::trance_gate

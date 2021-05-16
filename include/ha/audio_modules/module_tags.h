@@ -2,8 +2,7 @@
 
 #pragma once
 
-namespace ha {
-namespace audio_modules {
+namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -15,5 +14,4 @@ enum class module_tags
 };
 
 //-----------------------------------------------------------------------------
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules

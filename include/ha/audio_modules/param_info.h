@@ -4,8 +4,7 @@
 
 #include "ha/audio_modules/types.h"
 
-namespace ha {
-namespace audio_modules {
+namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -25,5 +24,4 @@ struct param_info
 };
 
 //-----------------------------------------------------------------------------
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules

@@ -5,9 +5,7 @@
 #include "trance_gate_config.h"
 #include <cassert>
 
-namespace ha {
-namespace audio_modules {
-namespace trance_gate {
+namespace ha::audio_modules::trance_gate {
 namespace {
 
 //-----------------------------------------------------------------------------
@@ -300,6 +298,4 @@ void tg_processor::update_param(tag_type param_tag, real value)
 }
 
 //-----------------------------------------------------------------------------
-} // namespace trance_gate
-} // namespace audio_modules
-} // namespace ha
+} // namespace ha::audio_modules::trance_gate
