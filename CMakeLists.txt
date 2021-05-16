@@ -64,16 +64,6 @@ target_include_directories(audio-modules_test
         ${CMAKE_CURRENT_LIST_DIR}/test
 )
 
-#add_executable(audio-modules-graph-printer
-#    test/audio_modules_graph_printer
-#)
-
-#target_link_libraries(audio-modules-graph-printer
-#    PRIVATE
-#        audio-modules
-#)
-
-
 add_test(NAME audio-modules_test 
     COMMAND audio-modules_test
 )
