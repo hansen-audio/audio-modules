@@ -249,6 +249,7 @@ bool tg_processor::process_audio(process_data& data)
         });
 
     tg::set_tempo(tg_context, data.tempo);
+    tg::update_project_time_music(tg_context, data.project_time_music);
 
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
