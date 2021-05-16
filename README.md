@@ -1,6 +1,6 @@
 # Audio Modules
 
-## Motivation
+## Summary
 
 The audio-modules library wraps the effects of the fx-collection library into a uniform interface. Like this all modules and its properties can be accessed the same way.
 
