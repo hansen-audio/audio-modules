@@ -1,5 +1,7 @@
 # Audio Modules Library
 
+[![CMake (Linux, macOS, Windows)](https://github.com/hansen-audio/audio-modules/actions/workflows/cmake.yml/badge.svg)](https://github.com/hansen-audio/audio-modules/actions/workflows/cmake.yml)
+
 ## Summary
 
 The audio-modules library wraps the effects of the fx-collection library into a uniform interface. Like this all modules and its properties can be accessed the same way.
