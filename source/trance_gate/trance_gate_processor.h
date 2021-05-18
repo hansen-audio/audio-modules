@@ -26,8 +26,9 @@ public:
 private:
     void update_param(tag_type param_tag, real value);
 
-    mut_real delay_len   = 0.;
-    mut_real fade_in_len = 0.;
+    mut_real delay_len     = real(0.);
+    mut_real fade_in_len   = real(0.);
+    mut_real trigger_phase = real(0.);
     silence_detection::context sd_context;
     bool needs_trigger = true;
 

@@ -248,9 +248,6 @@ bool tg_processor::process_audio(process_data& data)
             update_param(param_tag, value);
         });
 
-    tg::set_tempo(tg_context, data.tempo);
-    tg::update_project_time_music(tg_context, data.project_time_music);
-
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
@@ -264,7 +261,14 @@ bool tg_processor::process_audio(process_data& data)
     {
         needs_trigger = false;
         tg::trigger(tg_context, delay_len, fade_in_len);
+
+        trigger_phase = real(1.) - fmod(data.project_time_music, real(1.));
     }
+
+    tg::set_tempo(tg_context, data.tempo);
+
+    real ptm = data.project_time_music + trigger_phase;
+    tg::update_project_time_music(tg_context, ptm);
 
     process_audio_buffers(tg_context, data);
 
