@@ -26,14 +26,19 @@ public:
 private:
     void update_param(tag_type param_tag, real value);
 
-    mut_real delay_len     = real(0.);
-    mut_real fade_in_len   = real(0.);
-    mut_real trigger_phase = real(0.);
-    silence_detection::context sd_context;
-    bool needs_trigger = true;
+    struct context
+    {
+        mut_real delay_len     = real(0.);
+        mut_real fade_in_len   = real(0.);
+        mut_real trigger_phase = real(0.);
+        silence_detection::context silence_detection_cx;
+        bool needs_trigger = true;
 
-    fx_collection::trance_gate::context tg_context =
-        fx_collection::trance_gate::create();
+        fx_collection::trance_gate::context trance_gate_cx =
+            fx_collection::trance_gate::create();
+    };
+
+    context cx;
 };
 
 //-----------------------------------------------------------------------------

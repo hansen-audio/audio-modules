@@ -11,7 +11,7 @@ namespace {
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameter(modulation_data::pin_data const& pin,
-                      fx_collection::trance_gate::context& tg_context,
+                      fx_collection::trance_gate::context& trance_gate_cx,
                       const Func& func)
 {
     using tg_config = trance_gate::config;
@@ -54,7 +54,7 @@ void update_parameter(modulation_data::pin_data const& pin,
             constexpr i32 LEFT_CH_IDX = 0;
 
             const auto tag = pin.tag - tg_config::param_tags::step_le_01;
-            tg::set_step(tg_context, LEFT_CH_IDX, tag, pin.value);
+            tg::set_step(trance_gate_cx, LEFT_CH_IDX, tag, pin.value);
             break;
         }
         case tg_config::param_tags::step_ri_01:
@@ -92,11 +92,11 @@ void update_parameter(modulation_data::pin_data const& pin,
             constexpr i32 RIGHT_CH_IDX = 1;
 
             const auto tag = pin.tag - tg_config::param_tags::step_ri_01;
-            tg::set_step(tg_context, RIGHT_CH_IDX, tag, pin.value);
+            tg::set_step(trance_gate_cx, RIGHT_CH_IDX, tag, pin.value);
             break;
         }
         case tg_config::param_tags::amount: {
-            tg::set_mix(tg_context, pin.value);
+            tg::set_mix(trance_gate_cx, pin.value);
             break;
         }
         case tg_config::param_tags::contour: {
@@ -105,7 +105,7 @@ void update_parameter(modulation_data::pin_data const& pin,
             static auto const& conv_funcs =
                 tg_config::get_convert_functions(info.convert_tag);
 
-            tg::set_contour(tg_context, conv_funcs.to_physical(pin.value));
+            tg::set_contour(trance_gate_cx, conv_funcs.to_physical(pin.value));
             break;
         }
         case tg_config::param_tags::speed: {
@@ -117,7 +117,7 @@ void update_parameter(modulation_data::pin_data const& pin,
             auto const step_len =
                 tg_config::get_speed(conv_funcs.to_physical(pin.value));
 
-            tg::set_step_len(tg_context, step_len);
+            tg::set_step_len(trance_gate_cx, step_len);
             break;
         }
         case tg_config::param_tags::step_count: {
@@ -126,19 +126,20 @@ void update_parameter(modulation_data::pin_data const& pin,
             static auto const& conv_funcs =
                 tg_config::get_convert_functions(info.convert_tag);
 
-            tg::set_step_count(tg_context, conv_funcs.to_physical(pin.value));
+            tg::set_step_count(trance_gate_cx,
+                               conv_funcs.to_physical(pin.value));
             break;
         }
         case tg_config::param_tags::mode: {
-            tg::set_stereo_mode(tg_context, pin.value > 0.5 ? true : false);
+            tg::set_stereo_mode(trance_gate_cx, pin.value > 0.5 ? true : false);
             break;
         }
         case tg_config::param_tags::width: {
-            tg::set_width(tg_context, pin.value);
+            tg::set_width(trance_gate_cx, pin.value);
             break;
         }
         case tg_config::param_tags::shuffle: {
-            tg::set_shuffle_amount(tg_context, pin.value);
+            tg::set_shuffle_amount(trance_gate_cx, pin.value);
             break;
         }
         case tg_config::param_tags::fade_in: {
@@ -172,17 +173,18 @@ void update_parameter(modulation_data::pin_data const& pin,
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameters(modulation_data const& mod_data,
-                       fx_collection::trance_gate::context& tg_context,
+                       fx_collection::trance_gate::context& trance_gate_cx,
                        const Func& func)
 {
     for (const auto& pin : mod_data.pin_datas)
     {
-        update_parameter(pin, tg_context, func);
+        update_parameter(pin, trance_gate_cx, func);
     }
 }
 
 //-----------------------------------------------------------------------------
-bool is_silent_input(process_data& data, silence_detection::context& sd_context)
+bool is_silent_input(process_data& data,
+                     silence_detection::context& silence_detection_cx)
 {
     using audio_frame = fx_collection::audio_frame;
 
@@ -193,14 +195,14 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_context)
         frame.data[0] = data.inputs[0][0][s];
         frame.data[1] = data.inputs[0][1][s];
 
-        is_silent = silence_detection::process(sd_context, frame);
+        is_silent = silence_detection::process(silence_detection_cx, frame);
     }
 
     return is_silent;
 }
 
 //-----------------------------------------------------------------------------
-void process_audio_buffers(fx_collection::trance_gate::context& tg_context,
+void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
                            process_data& data)
 {
     using tg          = fx_collection::trance_gate;
@@ -213,7 +215,7 @@ void process_audio_buffers(fx_collection::trance_gate::context& tg_context,
     {
         frame.data[L] = data.inputs[0][L][s];
         frame.data[R] = data.inputs[0][R][s];
-        tg::process(tg_context, frame, frame);
+        tg::process(trance_gate_cx, frame, frame);
         data.outputs[0][L][s] = frame.data[L];
         data.outputs[0][R][s] = frame.data[R];
     }
@@ -231,7 +233,7 @@ tg_processor::tg_processor()
     {
         modulation_data::pin_data pin{info.param_tag, info.default_normalised};
         update_parameter(
-            pin, tg_context, [this](tag_type param_tag, real value) {
+            pin, cx.trance_gate_cx, [this](tag_type param_tag, real value) {
                 update_param(param_tag, value);
             });
     }
@@ -243,34 +245,35 @@ bool tg_processor::process_audio(process_data& data)
     using tg          = fx_collection::trance_gate;
     using audio_frame = fx_collection::audio_frame;
 
-    update_parameters(
-        data.mod_data, tg_context, [this](tag_type param_tag, real value) {
-            update_param(param_tag, value);
-        });
+    update_parameters(data.mod_data,
+                      cx.trance_gate_cx,
+                      [this](tag_type param_tag, real value) {
+                          update_param(param_tag, value);
+                      });
 
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    if (is_silent_input(data, sd_context))
+    if (is_silent_input(data, cx.silence_detection_cx))
     {
-        needs_trigger = true;
+        cx.needs_trigger = true;
         return true;
     }
 
-    if (needs_trigger)
+    if (cx.needs_trigger)
     {
-        needs_trigger = false;
-        tg::trigger(tg_context, delay_len, fade_in_len);
+        cx.needs_trigger = false;
+        tg::trigger(cx.trance_gate_cx, cx.delay_len, cx.fade_in_len);
 
-        trigger_phase = real(1.) - fmod(data.project_time_music, real(1.));
+        cx.trigger_phase = real(1.) - fmod(data.project_time_music, real(1.));
     }
 
-    tg::set_tempo(tg_context, data.tempo);
+    tg::set_tempo(cx.trance_gate_cx, data.tempo);
 
-    real ptm = data.project_time_music + trigger_phase;
-    tg::update_project_time_music(tg_context, ptm);
+    real ptm = data.project_time_music + cx.trigger_phase;
+    tg::update_project_time_music(cx.trance_gate_cx, ptm);
 
-    process_audio_buffers(tg_context, data);
+    process_audio_buffers(cx.trance_gate_cx, data);
 
     return true;
 }
@@ -280,10 +283,11 @@ void tg_processor::setup_processing(process_setup& setup)
 {
     using tg = fx_collection::trance_gate;
 
-    tg::set_sample_rate(tg_context, setup.sample_rate);
+    tg::set_sample_rate(cx.trance_gate_cx, setup.sample_rate);
 
     constexpr real RETRIGGER_TIMER = 0.5;
-    sd_context = silence_detection::create(setup.sample_rate, RETRIGGER_TIMER);
+    cx.silence_detection_cx =
+        silence_detection::create(setup.sample_rate, RETRIGGER_TIMER);
 }
 
 //-----------------------------------------------------------------------------
@@ -292,10 +296,10 @@ void tg_processor::update_param(tag_type param_tag, real value)
     switch (param_tag)
     {
         case config::param_tags::fade_in:
-            fade_in_len = value;
+            cx.fade_in_len = value;
             break;
         case config::param_tags::delay:
-            delay_len = value;
+            cx.delay_len = value;
             break;
         default:
             break;
