@@ -222,6 +222,23 @@ void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
 }
 
 //-----------------------------------------------------------------------------
+real compute_project_time_anchor(real project_time_music)
+{
+    if (project_time_music < real(0.))
+    {
+        real ptm       = abs(project_time_music);
+        real remainder = fmod(ptm, real(1.));
+        return remainder;
+    }
+    else
+    {
+        real ptm       = project_time_music;
+        real remainder = fmod(ptm, real(1.));
+        return real(1.) - remainder;
+    }
+}
+
+//-----------------------------------------------------------------------------
 } // namespace
 
 /**
@@ -265,7 +282,7 @@ bool tg_processor::process_audio(process_data& data)
         cx.needs_trigger = false;
         tg::trigger(cx.trance_gate_cx, cx.delay_len, cx.fade_in_len);
 
-        cx.trigger_phase = real(1.) - fmod(data.project_time_music, real(1.));
+        cx.trigger_phase = compute_project_time_anchor(data.project_time_music);
     }
 
     tg::set_tempo(cx.trance_gate_cx, data.tempo);
