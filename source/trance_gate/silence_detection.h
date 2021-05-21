@@ -16,7 +16,7 @@ struct silence_detection final
     struct context
     {
         mut_real duration_in_samples = 44100.;
-        mut_i32 sample_count         = 0;
+        mut_i32 frames_of_silence    = 0;
     };
 
     static context create(real sample_rate, real duration_in_seconds);

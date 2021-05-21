@@ -18,22 +18,25 @@ bool silence_detection::process(context& ctx,
                                 fx_collection::audio_frame const& frame)
 {
     using value_type = decltype(fx_collection::audio_frame::data)::value_type;
-    constexpr auto THRESHOLD = 1e-22f;
+    constexpr auto THRESHOLD = 1e-9f;
 
-    value_type sum = 0.;
-    for (const auto& sample : frame.data)
+    // Increment the silence counter...
+    ctx.frames_of_silence++;
+
+    fx_collection::audio_frame sum{real(0.)};
+    for (mut_i32 s = 0; s < frame.data.size(); ++s)
     {
-        value_type const abs_value = std::abs(value_type(sample));
-        sum += abs_value;
+        sum.data[s] += std::abs(frame.data[s]);
+        if (sum.data[s] >= THRESHOLD)
+        {
+            //...but set it back to zero when there is noise.
+            ctx.frames_of_silence = 0;
+            break;
+        }
     }
 
-    if (sum < THRESHOLD)
-        ctx.sample_count += 1;
-    else
-        ctx.sample_count = 0;
-
-    auto const duration_exceeded = ctx.sample_count > ctx.duration_in_samples;
-    return duration_exceeded;
+    // When the counter reaches the duration specified, it is silent.
+    return ctx.frames_of_silence > ctx.duration_in_samples;
 }
 
 //-----------------------------------------------------------------------------
