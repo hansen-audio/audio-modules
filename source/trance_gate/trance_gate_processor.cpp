@@ -209,13 +209,13 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
 {
     using tg_config = trance_gate::config;
 
-    i32 user_based_index = cx.step_val.pos + 1;
     static auto constexpr info =
         tg_config::param_list.at(tg_config::param_tags::step_count);
     static auto const& conv_funcs =
         tg_config::get_convert_functions(info.convert_tag);
 
-    real norm_index = conv_funcs.to_normalised(user_based_index);
+    i32 index       = cx.step_val.pos + 1; // non programming index!
+    real norm_index = conv_funcs.to_normalised(index);
     data.param_outputs.push_back({tg_config::param_tags::step_pos, norm_index});
 }
 
