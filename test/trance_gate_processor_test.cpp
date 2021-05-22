@@ -30,7 +30,7 @@ audio_modules::process_data create_process_data()
     data.outputs.at(0).at(0).resize(sample_count);
     data.outputs.at(0).at(1).resize(sample_count);
     data.param_inputs.reserve(128);
-
+    data.param_outputs.reserve(128);
     return data;
 }
 
