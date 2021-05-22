@@ -216,8 +216,7 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
         tg_config::get_convert_functions(info.convert_tag);
 
     real norm_index = conv_funcs.to_normalised(user_based_index);
-    data.param_outputs.push_back(
-        {tg_config::param_tags::step_count, norm_index});
+    data.param_outputs.push_back({tg_config::param_tags::step_pos, norm_index});
 }
 
 //-----------------------------------------------------------------------------
