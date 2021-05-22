@@ -8,18 +8,12 @@ namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
- * modulation_data
+ * params_data
  */
-struct modulation_data
+struct param_data
 {
-    struct pin_data
-    {
-        tag_type tag = -1;
-        real value   = 0.;
-    };
-
-    using pin_data_list = std::vector<pin_data>;
-    pin_data_list pin_datas;
+    tag_type tag = -1;
+    real value   = real(0.);
 };
 
 /**
@@ -27,6 +21,8 @@ struct modulation_data
  */
 struct process_data
 {
+    using param_datas = std::vector<param_data>;
+
     mut_real sample_rate           = real(44100.);
     mut_real oversampling_factor   = real(1.);
     mut_real tempo                 = real(120.);
@@ -36,7 +32,7 @@ struct process_data
 
     audio_busses inputs;
     audio_busses outputs;
-    modulation_data mod_data;
+    param_datas param_inputs;
 };
 
 /**
