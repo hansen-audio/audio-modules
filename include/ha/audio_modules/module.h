@@ -12,8 +12,8 @@ namespace ha::audio_modules {
  */
 struct param_change
 {
-    tag_type tag = -1;
-    real value   = real(0.);
+    mut_tag_type tag = -1;
+    mut_real value   = real(0.);
 };
 
 /**
