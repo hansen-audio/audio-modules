@@ -94,6 +94,7 @@ struct config
             fade_in,
             delay,
             shuffle,
+            step_pos,
             // sync,
             count
         };
@@ -271,6 +272,15 @@ struct config
             /*param_tag = */          param_tags::shuffle,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::percent
+        },
+        {
+            /*name = */               "Step Position",
+            /*short_name = */         "SPs",
+            /*units = */              "%",
+            /*param_tag = */          param_tags::step_pos,
+            /*default_normalised = */ 0.,
+            /*convert_tag = */        convert_tags::step_count,
+            /*is_read_only = */       true
         }//,
         // {
         //     /*name = */               "Sync",

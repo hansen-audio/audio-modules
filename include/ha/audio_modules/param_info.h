@@ -21,6 +21,7 @@ struct param_info
     tag_type param_tag      = INVALID_PARAM_TAG;
     real default_normalised = 0.;
     tag_type convert_tag    = INVALID_CONVERT_TAG;
+    bool is_read_only       = false;
 };
 
 //-----------------------------------------------------------------------------

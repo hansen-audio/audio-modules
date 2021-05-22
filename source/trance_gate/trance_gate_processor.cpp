@@ -10,7 +10,7 @@ namespace {
 
 //-----------------------------------------------------------------------------
 template <typename Func>
-void update_parameter(param_data const& param,
+void update_parameter(param_change const& param,
                       fx_collection::trance_gate::context& trance_gate_cx,
                       const Func& func)
 {
@@ -174,7 +174,7 @@ void update_parameter(param_data const& param,
 
 //-----------------------------------------------------------------------------
 template <typename Func>
-void update_parameters(process_data::param_datas const& param_ins,
+void update_parameters(process_data::param_changes const& param_ins,
                        fx_collection::trance_gate::context& trance_gate_cx,
                        const Func& func)
 {
@@ -204,6 +204,23 @@ bool is_silent_input(process_data& data,
 }
 
 //-----------------------------------------------------------------------------
+void output_step_pos_param(fx_collection::trance_gate::context& cx,
+                           process_data& data)
+{
+    using tg_config = trance_gate::config;
+
+    i32 user_based_index = cx.step_val.pos + 1;
+    static auto constexpr info =
+        tg_config::param_list.at(tg_config::param_tags::step_count);
+    static auto const& conv_funcs =
+        tg_config::get_convert_functions(info.convert_tag);
+
+    real norm_index = conv_funcs.to_normalised(user_based_index);
+    data.param_outputs.push_back(
+        {tg_config::param_tags::step_count, norm_index});
+}
+
+//-----------------------------------------------------------------------------
 void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
                            process_data& data)
 {
@@ -221,6 +238,8 @@ void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
         data.outputs[0][L][s] = frame.data[L];
         data.outputs[0][R][s] = frame.data[R];
     }
+
+    output_step_pos_param(trance_gate_cx, data);
 }
 
 //-----------------------------------------------------------------------------

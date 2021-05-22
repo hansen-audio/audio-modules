@@ -29,7 +29,7 @@ audio_modules::process_data create_process_data()
     data.inputs.at(0).at(1).resize(sample_count);
     data.outputs.at(0).at(0).resize(sample_count);
     data.outputs.at(0).at(1).resize(sample_count);
-    data.mod_data.pin_datas.reserve(128);
+    data.param_inputs.reserve(128);
 
     return data;
 }
@@ -72,11 +72,11 @@ TEST(audio_modules_test, test_allocation_free_process_audio)
     tgp.setup_processing(ps);
 
     auto pd = create_process_data();
-    pd.mod_data.pin_datas.push_back(
+    pd.param_inputs.push_back(
         {audio_modules::trance_gate::config::param_tags::contour, 1.0});
-    pd.mod_data.pin_datas.push_back(
+    pd.param_inputs.push_back(
         {audio_modules::trance_gate::config::param_tags::amount, 1.0});
-    pd.mod_data.pin_datas.push_back(
+    pd.param_inputs.push_back(
         {audio_modules::trance_gate::config::param_tags::speed, 1.0});
 
     thread_malloc_detector detector;

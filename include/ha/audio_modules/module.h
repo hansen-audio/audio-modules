@@ -10,7 +10,7 @@ namespace ha::audio_modules {
 /**
  * params_data
  */
-struct param_data
+struct param_change
 {
     tag_type tag = -1;
     real value   = real(0.);
@@ -21,7 +21,7 @@ struct param_data
  */
 struct process_data
 {
-    using param_datas = std::vector<param_data>;
+    using param_changes = std::vector<param_change>;
 
     mut_real sample_rate           = real(44100.);
     mut_real oversampling_factor   = real(1.);
@@ -32,7 +32,8 @@ struct process_data
 
     audio_busses inputs;
     audio_busses outputs;
-    param_datas param_inputs;
+    param_changes param_inputs;
+    param_changes param_outputs;
 };
 
 /**
