@@ -46,6 +46,7 @@ add_executable(audio-modules_test
     test/trance_gate_processor_test.cpp
     test/thread_malloc_detector.cpp
     test/thread_malloc_detector.h
+    test/module_factory_test.cpp
 )
 
 target_link_libraries(audio-modules_test
