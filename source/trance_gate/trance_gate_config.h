@@ -95,7 +95,6 @@ struct config
             delay,
             shuffle,
             step_pos,
-            // sync,
             count
         };
     };
@@ -238,7 +237,7 @@ struct config
             /*short_name = */         "Mod",
             /*units = */              "",
             /*param_tag = */          param_tags::mode,
-            /*default_normalised = */ 0.5,
+            /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::mono_stereo
         },
         {
@@ -281,15 +280,7 @@ struct config
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::step_count,
             /*is_read_only = */       true
-        }//,
-        // {
-        //     /*name = */               "Sync",
-        //     /*short_name = */         "Syn",
-        //     /*units = */              "",
-        //     /*param_tag = */          param_tags::sync,
-        //     /*default_normalised = */ 0.,
-        //     /*convert_tag = */        convert_tags::sync_mode
-        // }
+        }
     }};
     // clang-format on
 
