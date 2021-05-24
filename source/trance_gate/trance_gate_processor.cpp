@@ -296,6 +296,12 @@ bool tg_processor::process_audio(process_data& data)
 
     if (is_silent_input(data, cx.silence_detection_cx))
     {
+        if (!cx.needs_trigger)
+        {
+            cx.trance_gate_cx.step_val.pos = real(0.);
+            output_step_pos_param(cx.trance_gate_cx, data);
+        }
+
         cx.needs_trigger = true;
         return true;
     }
