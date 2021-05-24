@@ -298,7 +298,7 @@ bool tg_processor::process_audio(process_data& data)
     {
         if (!cx.needs_trigger)
         {
-            cx.trance_gate_cx.step_val.pos = real(0.);
+            cx.trance_gate_cx.step_val.pos = 0;
             output_step_pos_param(cx.trance_gate_cx, data);
         }
 
