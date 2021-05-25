@@ -34,7 +34,7 @@ private:
         silence_detection::context silence_detection_cx;
         bool needs_trigger = true;
 
-        fx_collection::trance_gate::context trance_gate_cx =
+        fx_collection::trance_gate::context fx_trance_gate_cx =
             fx_collection::trance_gate::create();
     };
 

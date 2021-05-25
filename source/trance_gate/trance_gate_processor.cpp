@@ -14,7 +14,7 @@ using fx_tg = fx_collection::trance_gate;
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameter(param_change const& param,
-                      fx_collection::trance_gate::context& trance_gate_cx,
+                      fx_collection::trance_gate::context& tg_cx,
                       const Func& func)
 {
     using cfg  = trance_gate::config;
@@ -57,7 +57,7 @@ void update_parameter(param_change const& param,
             constexpr i32 LEFT_CH_IDX = 0;
 
             const auto tag = param.tag - tags::step_le_01;
-            fx_tg::set_step(trance_gate_cx, LEFT_CH_IDX, tag, param.value);
+            fx_tg::set_step(tg_cx, LEFT_CH_IDX, tag, param.value);
             break;
         }
         case tags::step_ri_01:
@@ -95,11 +95,11 @@ void update_parameter(param_change const& param,
             constexpr i32 RIGHT_CH_IDX = 1;
 
             const auto tag = param.tag - tags::step_ri_01;
-            fx_tg::set_step(trance_gate_cx, RIGHT_CH_IDX, tag, param.value);
+            fx_tg::set_step(tg_cx, RIGHT_CH_IDX, tag, param.value);
             break;
         }
         case tags::amount: {
-            fx_tg::set_mix(trance_gate_cx, param.value);
+            fx_tg::set_mix(tg_cx, param.value);
             break;
         }
         case tags::contour: {
@@ -107,8 +107,7 @@ void update_parameter(param_change const& param,
             static auto const& conv_funcs =
                 cfg::get_convert_functions(info.convert_tag);
 
-            fx_tg::set_contour(trance_gate_cx,
-                               conv_funcs.to_physical(param.value));
+            fx_tg::set_contour(tg_cx, conv_funcs.to_physical(param.value));
             break;
         }
         case tags::speed: {
@@ -119,7 +118,7 @@ void update_parameter(param_change const& param,
             auto const step_len =
                 cfg::get_speed(conv_funcs.to_physical(param.value));
 
-            fx_tg::set_step_len(trance_gate_cx, step_len);
+            fx_tg::set_step_len(tg_cx, step_len);
             break;
         }
         case tags::step_count: {
@@ -127,21 +126,19 @@ void update_parameter(param_change const& param,
             static auto const& conv_funcs =
                 cfg::get_convert_functions(info.convert_tag);
 
-            fx_tg::set_step_count(trance_gate_cx,
-                                  conv_funcs.to_physical(param.value));
+            fx_tg::set_step_count(tg_cx, conv_funcs.to_physical(param.value));
             break;
         }
         case tags::mode: {
-            fx_tg::set_stereo_mode(trance_gate_cx,
-                                   param.value > 0.5 ? true : false);
+            fx_tg::set_stereo_mode(tg_cx, param.value > 0.5 ? true : false);
             break;
         }
         case tags::width: {
-            fx_tg::set_width(trance_gate_cx, param.value);
+            fx_tg::set_width(tg_cx, param.value);
             break;
         }
         case tags::shuffle: {
-            fx_tg::set_shuffle_amount(trance_gate_cx, param.value);
+            fx_tg::set_shuffle_amount(tg_cx, param.value);
             break;
         }
         case tags::fade_in: {
@@ -173,18 +170,17 @@ void update_parameter(param_change const& param,
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameters(process_data::param_changes const& param_ins,
-                       fx_collection::trance_gate::context& trance_gate_cx,
+                       fx_collection::trance_gate::context& tg_cx,
                        const Func& func)
 {
     for (const auto& pin : param_ins)
     {
-        update_parameter(pin, trance_gate_cx, func);
+        update_parameter(pin, tg_cx, func);
     }
 }
 
 //-----------------------------------------------------------------------------
-bool is_silent_input(process_data& data,
-                     silence_detection::context& silence_detection_cx)
+bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
 {
     using audio_frame = fx_collection::audio_frame;
 
@@ -195,7 +191,7 @@ bool is_silent_input(process_data& data,
         frame.data[0] = data.inputs[0][0][s];
         frame.data[1] = data.inputs[0][1][s];
 
-        is_silent = silence_detection::process(silence_detection_cx, frame);
+        is_silent = silence_detection::process(sd_cx, frame);
     }
 
     return is_silent;
@@ -218,7 +214,7 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
 }
 
 //-----------------------------------------------------------------------------
-void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
+void process_audio_buffers(fx_collection::trance_gate::context& cx,
                            process_data& data)
 {
     using audio_frame = fx_collection::audio_frame;
@@ -230,12 +226,12 @@ void process_audio_buffers(fx_collection::trance_gate::context& trance_gate_cx,
     {
         frame.data[L] = data.inputs[0][L][s];
         frame.data[R] = data.inputs[0][R][s];
-        fx_tg::process(trance_gate_cx, frame, frame);
+        fx_tg::process(cx, frame, frame);
         data.outputs[0][L][s] = frame.data[L];
         data.outputs[0][R][s] = frame.data[R];
     }
 
-    output_step_pos_param(trance_gate_cx, data);
+    output_step_pos_param(cx, data);
 }
 
 //-----------------------------------------------------------------------------
@@ -268,7 +264,7 @@ tg_processor::tg_processor()
         // clang-format off
         update_parameter(
             {info.param_tag, info.default_normalised},
-            cx.trance_gate_cx, 
+            cx.fx_trance_gate_cx, 
             [this](tag_type param_tag, real value) {
                 update_param(param_tag, value);
             });
@@ -282,7 +278,7 @@ bool tg_processor::process_audio(process_data& data)
     using audio_frame = fx_collection::audio_frame;
 
     update_parameters(data.param_inputs,
-                      cx.trance_gate_cx,
+                      cx.fx_trance_gate_cx,
                       [this](tag_type param_tag, real value) {
                           update_param(param_tag, value);
                       });
@@ -294,8 +290,8 @@ bool tg_processor::process_audio(process_data& data)
     {
         if (!cx.needs_trigger)
         {
-            cx.trance_gate_cx.step_val.pos = 0;
-            output_step_pos_param(cx.trance_gate_cx, data);
+            cx.fx_trance_gate_cx.step_val.pos = 0;
+            output_step_pos_param(cx.fx_trance_gate_cx, data);
         }
 
         cx.needs_trigger = true;
@@ -305,17 +301,17 @@ bool tg_processor::process_audio(process_data& data)
     if (cx.needs_trigger)
     {
         cx.needs_trigger = false;
-        fx_tg::trigger(cx.trance_gate_cx, cx.delay_len, cx.fade_in_len);
+        fx_tg::trigger(cx.fx_trance_gate_cx, cx.delay_len, cx.fade_in_len);
 
         cx.trigger_phase = compute_project_time_anchor(data.project_time_music);
     }
 
-    fx_tg::set_tempo(cx.trance_gate_cx, data.tempo);
+    fx_tg::set_tempo(cx.fx_trance_gate_cx, data.tempo);
 
     real ptm = data.project_time_music + cx.trigger_phase;
-    fx_tg::update_project_time_music(cx.trance_gate_cx, ptm);
+    fx_tg::update_project_time_music(cx.fx_trance_gate_cx, ptm);
 
-    process_audio_buffers(cx.trance_gate_cx, data);
+    process_audio_buffers(cx.fx_trance_gate_cx, data);
 
     return true;
 }
@@ -323,7 +319,7 @@ bool tg_processor::process_audio(process_data& data)
 //-----------------------------------------------------------------------------
 void tg_processor::setup_processing(process_setup& setup)
 {
-    fx_tg::set_sample_rate(cx.trance_gate_cx, setup.sample_rate);
+    fx_tg::set_sample_rate(cx.fx_trance_gate_cx, setup.sample_rate);
 
     constexpr real RETRIGGER_TIMER = 0.5;
     cx.silence_detection_cx =
