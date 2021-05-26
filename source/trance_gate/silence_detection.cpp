@@ -2,6 +2,7 @@
 
 #include "silence_detection.h"
 #include <cmath>
+#include <cstddef>
 
 namespace ha::audio_modules::trance_gate {
 
@@ -17,14 +18,13 @@ silence_detection::context silence_detection::create(real sample_rate,
 bool silence_detection::process(context& ctx,
                                 fx_collection::audio_frame const& frame)
 {
-    using value_type = decltype(fx_collection::audio_frame::data)::value_type;
     constexpr auto THRESHOLD = 1e-9f;
 
     // Increment the silence counter...
     ctx.frames_of_silence++;
 
     fx_collection::audio_frame sum{real(0.)};
-    for (mut_i32 s = 0; s < frame.data.size(); ++s)
+    for (std::size_t s = 0; s < frame.data.size(); ++s)
     {
         sum.data[s] += std::abs(frame.data[s]);
         if (sum.data[s] >= THRESHOLD)
