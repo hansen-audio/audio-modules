@@ -58,7 +58,14 @@ convert_funcs_list const module_factory::convert_funcs(module_tags tag)
 //-----------------------------------------------------------------------------
 audio_module_ptr module_factory::create_audio_module(module_tags tag)
 {
-    return std::make_unique<trance_gate::tg_processor>();
+    switch (tag)
+    {
+        case module_tags::TRANCE_GATE:
+            return std::make_unique<trance_gate::tg_processor>();
+            break;
+        default:
+            return std::make_unique<trance_gate::tg_processor>();
+    }
 }
 
 //-----------------------------------------------------------------------------
