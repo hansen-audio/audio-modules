@@ -275,8 +275,6 @@ tg_processor::tg_processor()
 //-----------------------------------------------------------------------------
 bool tg_processor::process_audio(process_data& data)
 {
-    using audio_frame = fx_collection::audio_frame;
-
     update_parameters(data.param_inputs,
                       cx.fx_trance_gate_cx,
                       [this](tag_type param_tag, real value) {
