@@ -204,7 +204,7 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
     using cfg  = trance_gate::config;
     using tags = cfg::param_tags;
 
-    static auto constexpr info = cfg::param_list.at(tags::step_count);
+    static auto constexpr info = cfg::param_list.at(tags::step_pos);
     static auto const& conv_funcs =
         cfg::get_convert_functions(info.convert_tag);
 

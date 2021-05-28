@@ -114,6 +114,7 @@ struct config
             step_count,
             mono_stereo,
             sync_mode,
+            step_pos,
             count
         };
     };
@@ -278,7 +279,7 @@ struct config
             /*units = */              "%",
             /*param_tag = */          param_tags::step_pos,
             /*default_normalised = */ 0.,
-            /*convert_tag = */        convert_tags::step_count,
+            /*convert_tag = */        convert_tags::step_pos,
             /*is_read_only = */       true
         }
     }};

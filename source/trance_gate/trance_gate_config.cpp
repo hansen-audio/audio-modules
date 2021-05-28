@@ -115,7 +115,8 @@ static percent_type const percent_converter;
 static log_type const contour_converter(4., 0.001, 0.25);
 static speed_type const speed_converter(speed_strings);
 static dly_fad_type const delay_fade_converter(delay_fade_len_strings);
-static lin_type const step_count_converter(1, 32);
+static lin_type const step_count_converter(2, 32);
+static lin_type const step_pos_converter(1, 32);
 static mono_mode_type const mono_mode_converter(mono_mode_strings);
 static on_off_type const on_off_converter(on_off_strings);
 static sync_mode_type const sync_mode_converter(sync_mode_strings);
@@ -195,6 +196,21 @@ static converter_list_type const convert_list = {{
         /*to_string     = */ [](real phys) { return sync_mode_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return sync_mode_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return sync_mode_strings.size() - 1; }
+    },
+    {   // convert_tags::step_pos
+        /*to_physical   = */ [](real norm) { return step_pos_converter.to_physical(norm); },
+        /*to_normalised = */ [](real phys) { return step_pos_converter.to_normalized(phys); },
+        /*to_string     = */ [](real phys) {
+            using val_type = decltype(step_pos_converter)::value_type;
+            auto precisionFunc = [](val_type) -> i32 {
+                return 0;
+            };
+            auto rounded = static_cast<val_type>(static_cast<i32>(phys));
+            return step_pos_converter.to_string(rounded, precisionFunc);
+        },
+        /*from_string   = */ [](string string) { return step_pos_converter.from_string(string); },
+        /*num_steps     = */ []() -> i32   { return step_pos_converter.to_physical(1.)
+                                                  - step_pos_converter.to_physical(0.); }
     }
 }};
 // clang-format on
