@@ -115,7 +115,7 @@ TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
     const auto phys   = converter.to_physical(0.0322);
     int const rounded = static_cast<int>(phys);
     int rounded_2     = phys;
-    EXPECT_TRUE(rounded == 1);
+    EXPECT_TRUE(rounded == 2);
 }
 
 //-----------------------------------------------------------------------------
