@@ -28,7 +28,7 @@ struct process_data
     mut_real tempo                 = real(120.);
     mut_i32 num_samples            = 256;
     mut_i64 continous_time_samples = 0;
-    mut_real project_time_music    = real(1.);
+    mut_f64 project_time_music     = mut_f64(1.);
 
     audio_busses inputs;
     audio_busses outputs;

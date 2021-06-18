@@ -235,25 +235,25 @@ void process_audio_buffers(fx_collection::trance_gate::context& cx,
 }
 
 //-----------------------------------------------------------------------------
-real compute_project_time_anchor(real project_time_music)
+f64 compute_project_time_anchor(f64 project_time_music)
 {
     /**
      * 'Delay' and 'Fade In' parameters' max len is '4 notes'
      * which is 16 beats.
      */
-    constexpr real max_phase_len_in_beats = real(16.);
+    constexpr f64 MAX_PHASE_LEN_IN_BEATS = f64(16.);
 
-    if (project_time_music < real(0.))
+    if (project_time_music < f64(0.))
     {
-        real ptm       = abs(project_time_music);
-        real remainder = fmod(ptm, max_phase_len_in_beats);
+        f64 ptm       = abs(project_time_music);
+        f64 remainder = fmod(ptm, MAX_PHASE_LEN_IN_BEATS);
         return remainder;
     }
     else
     {
-        real ptm       = project_time_music;
-        real remainder = fmod(ptm, max_phase_len_in_beats);
-        return max_phase_len_in_beats - remainder;
+        f64 ptm       = project_time_music;
+        f64 remainder = fmod(ptm, MAX_PHASE_LEN_IN_BEATS);
+        return MAX_PHASE_LEN_IN_BEATS - remainder;
     }
 }
 

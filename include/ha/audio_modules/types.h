@@ -23,6 +23,9 @@ using mut_real = std::remove_const<real>::type;
 using tag_type     = i32;
 using mut_tag_type = mut_i32;
 
+using f64     = double const;
+using mut_f64 = std::remove_const<f64>::type;
+
 using string_view = std::string_view const;
 
 using string = std::string const;
