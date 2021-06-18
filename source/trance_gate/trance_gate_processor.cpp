@@ -237,17 +237,23 @@ void process_audio_buffers(fx_collection::trance_gate::context& cx,
 //-----------------------------------------------------------------------------
 real compute_project_time_anchor(real project_time_music)
 {
+    /**
+     * 'Delay' and 'Fade In' parameters' max len is '4 notes'
+     * which is 16 beats.
+     */
+    constexpr real max_phase_len_in_beats = real(16.);
+
     if (project_time_music < real(0.))
     {
         real ptm       = abs(project_time_music);
-        real remainder = fmod(ptm, real(1.));
+        real remainder = fmod(ptm, max_phase_len_in_beats);
         return remainder;
     }
     else
     {
         real ptm       = project_time_music;
-        real remainder = fmod(ptm, real(1.));
-        return real(1.) - remainder;
+        real remainder = fmod(ptm, max_phase_len_in_beats);
+        return max_phase_len_in_beats - remainder;
     }
 }
 
@@ -292,7 +298,9 @@ bool tg_processor::process_audio(process_data& data)
             output_step_pos_param(cx.fx_trance_gate_cx, data);
         }
 
-        cx.needs_trigger = true;
+        if (!cx.needs_trigger)
+            cx.needs_trigger = true;
+
         return true;
     }
 
