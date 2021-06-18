@@ -212,7 +212,7 @@ struct config
         {
             /*name = */               "Speed",
             /*short_name = */         "Spd",
-            /*units = */              "Note",
+            /*units = */              "note",
             /*param_tag = */          param_tags::speed,
             /*default_normalised = */ 2. / 24., // 1/32
             /*convert_tag = */        convert_tags::speed
@@ -252,7 +252,7 @@ struct config
         {
             /*name = */               "Fade In",
             /*short_name = */         "FIn",
-            /*units = */              "Note",
+            /*units = */              "note",
             /*param_tag = */          param_tags::fade_in,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::delay_fade_length
@@ -260,7 +260,7 @@ struct config
         {
             /*name = */               "Delay",
             /*short_name = */         "Dly",
-            /*units = */              "Note",
+            /*units = */              "note",
             /*param_tag = */          param_tags::delay,
             /*default_normalised = */ 0.,
             /*convert_tag = */        convert_tags::delay_fade_length
