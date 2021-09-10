@@ -7,7 +7,7 @@
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 
-#define USE_FX_COLLECTION_RS 1
+// #define USE_FX_COLLECTION_RS 1
 #if USE_FX_COLLECTION_RS
 #include "fx-collection-rs_bindings.h"
 #endif
