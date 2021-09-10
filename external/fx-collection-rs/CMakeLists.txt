@@ -4,7 +4,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     fx-collection-rs
-    GIT_REPOSITORY http://gitea.fritz.box/hansen-audio/fx-collection-rs.git
+    GIT_REPOSITORY ${HA_GIT_REPOSITORY_URL}/hansen-audio/fx-collection-rs.git
     GIT_TAG master
 )
 
