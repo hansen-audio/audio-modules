@@ -208,7 +208,8 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
     static auto const& conv_funcs =
         cfg::get_convert_functions(info.convert_tag);
 
-    i32 index       = cx.step_val.pos + 1; // non programming index!
+    i32 step_pos    = fx_tg::get_step_pos(cx);
+    i32 index       = step_pos + 1; // non programming index!
     real norm_index = conv_funcs.to_normalised(index);
     data.param_outputs.push_back({tags::step_pos, norm_index});
 }
@@ -276,6 +277,18 @@ tg_processor::tg_processor()
             });
         // clang-format on
     }
+
+#if USE_FX_COLLECTION_RS
+    cx.context = fx_collection_rs::trance_gate::new_context(cx.context);
+#endif
+}
+
+//-----------------------------------------------------------------------------
+tg_processor::~tg_processor()
+{
+#if USE_FX_COLLECTION_RS
+    fx_collection_rs::trance_gate::free_context(cx.context);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -294,7 +307,7 @@ bool tg_processor::process_audio(process_data& data)
     {
         if (!cx.needs_trigger)
         {
-            cx.fx_trance_gate_cx.step_val.pos = 0;
+            fx_tg::reset_step_pos(cx.fx_trance_gate_cx, 0);
             output_step_pos_param(cx.fx_trance_gate_cx, data);
         }
 

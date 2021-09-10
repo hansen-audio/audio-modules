@@ -32,6 +32,7 @@ target_link_libraries(audio-modules
     PRIVATE
         aligned-allocator
         fx-collection
+        fx-collection-rs
         param-tool-box
 )
 
@@ -60,6 +61,7 @@ target_link_libraries(audio-modules_test
         aligned-allocator
         audio-modules
         fx-collection
+        fx-collection-rs
         gtest
         gtest_main
 )

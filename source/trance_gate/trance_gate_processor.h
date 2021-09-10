@@ -7,17 +7,22 @@
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 
+#if USE_FX_COLLECTION_RS
+#include "fx-collection-rs_bindings.h"
+#endif
+
 namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 /**
  * tg_processor
  */
-class tg_processor : public module
+class tg_processor final : public module
 {
 public:
     //-------------------------------------------------------------------------
     tg_processor();
+    ~tg_processor() override;
 
     bool process_audio(process_data& data) override;
     void setup_processing(process_setup& setup) override;
@@ -34,8 +39,12 @@ private:
         silence_detection::context silence_detection_cx;
         bool needs_trigger = true;
 
+#if USE_FX_COLLECTION_RS
+        fx_collection_rs::trance_gate::Context* fx_trance_gate_cx;
+#else
         fx_collection::trance_gate::context fx_trance_gate_cx =
             fx_collection::trance_gate::create();
+#endif
     };
 
     context cx;
