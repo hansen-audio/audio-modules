@@ -9,12 +9,20 @@ namespace ha::audio_modules::trance_gate {
 namespace {
 
 //-----------------------------------------------------------------------------
+#if USE_FX_COLLECTION_RS
+namespace fx_tg = fx_collection_rs::trance_gate;
+#else
 using fx_tg = fx_collection::trance_gate;
+#endif
 
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameter(param_change const& param,
-                      fx_collection::trance_gate::context& tg_cx,
+#if USE_FX_COLLECTION_RS
+                      fx_tg::Context* tg_cx,
+#else
+                      fx_tg::context& tg_cx,
+#endif
                       const Func& func)
 {
     using cfg  = trance_gate::config;
@@ -170,7 +178,11 @@ void update_parameter(param_change const& param,
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameters(process_data::param_changes const& param_ins,
-                       fx_collection::trance_gate::context& tg_cx,
+#if USE_FX_COLLECTION_RS
+                       fx_tg::Context* tg_cx,
+#else
+                       fx_tg::context& tg_cx,
+#endif
                        const Func& func)
 {
     for (const auto& pin : param_ins)
@@ -198,8 +210,13 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
 }
 
 //-----------------------------------------------------------------------------
-void output_step_pos_param(fx_collection::trance_gate::context& cx,
-                           process_data& data)
+void output_step_pos_param(
+#if USE_FX_COLLECTION_RS
+    fx_tg::Context* cx,
+#else
+    fx_tg::context& cx,
+#endif
+    process_data& data)
 {
     using cfg  = trance_gate::config;
     using tags = cfg::param_tags;
@@ -215,19 +232,36 @@ void output_step_pos_param(fx_collection::trance_gate::context& cx,
 }
 
 //-----------------------------------------------------------------------------
-void process_audio_buffers(fx_collection::trance_gate::context& cx,
-                           process_data& data)
+void process_audio_buffers(
+#if USE_FX_COLLECTION_RS
+    fx_tg::Context* cx,
+#else
+    fx_tg::context& cx,
+#endif
+    process_data& data)
 {
-    using audio_frame = fx_collection::audio_frame;
-    constexpr i32 L   = 0;
-    constexpr i32 R   = 1;
+    constexpr i32 L = 0;
+    constexpr i32 R = 1;
 
+#if USE_FX_COLLECTION_RS
+    struct AudioFrameType
+    {
+        fx_tg::AudioFrame data;
+    };
+    AudioFrameType frame;
+#else
+    using audio_frame = fx_collection::audio_frame;
     audio_frame frame = fx_collection::zero_audio_frame;
+#endif
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
         frame.data[L] = data.inputs[0][L][s];
         frame.data[R] = data.inputs[0][R][s];
+#if USE_FX_COLLECTION_RS
+        fx_tg::process(cx, &(frame.data), &(frame.data));
+#else
         fx_tg::process(cx, frame, frame);
+#endif
         data.outputs[0][L][s] = frame.data[L];
         data.outputs[0][R][s] = frame.data[R];
     }
@@ -266,6 +300,11 @@ f64 compute_project_time_anchor(f64 project_time_music)
  */
 tg_processor::tg_processor()
 {
+#if USE_FX_COLLECTION_RS
+    cx.fx_trance_gate_cx =
+        fx_collection_rs::trance_gate::new_context(cx.fx_trance_gate_cx);
+#endif
+
     for (param_info const& info : config::param_list)
     {
         // clang-format off
@@ -277,17 +316,13 @@ tg_processor::tg_processor()
             });
         // clang-format on
     }
-
-#if USE_FX_COLLECTION_RS
-    cx.context = fx_collection_rs::trance_gate::new_context(cx.context);
-#endif
 }
 
 //-----------------------------------------------------------------------------
 tg_processor::~tg_processor()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::trance_gate::free_context(cx.context);
+    fx_collection_rs::trance_gate::free_context(cx.fx_trance_gate_cx);
 #endif
 }
 
