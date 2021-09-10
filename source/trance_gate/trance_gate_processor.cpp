@@ -301,8 +301,7 @@ f64 compute_project_time_anchor(f64 project_time_music)
 tg_processor::tg_processor()
 {
 #if USE_FX_COLLECTION_RS
-    cx.fx_trance_gate_cx =
-        fx_collection_rs::trance_gate::new_context(cx.fx_trance_gate_cx);
+    cx.fx_trance_gate_cx = fx_collection_rs::trance_gate::tg_create();
 #endif
 
     for (param_info const& info : config::param_list)
@@ -322,7 +321,7 @@ tg_processor::tg_processor()
 tg_processor::~tg_processor()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::trance_gate::free_context(cx.fx_trance_gate_cx);
+    fx_collection_rs::trance_gate::tg_destroy(cx.fx_trance_gate_cx);
 #endif
 }
 
