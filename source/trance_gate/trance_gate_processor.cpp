@@ -19,7 +19,7 @@ using fx_tg = fx_collection::trance_gate;
 template <typename Func>
 void update_parameter(param_change const& param,
 #if USE_FX_COLLECTION_RS
-                      fx_tg::Context* tg_cx,
+                      fx_tg::TranceGate* tg_cx,
 #else
                       fx_tg::context& tg_cx,
 #endif
@@ -179,7 +179,7 @@ void update_parameter(param_change const& param,
 template <typename Func>
 void update_parameters(process_data::param_changes const& param_ins,
 #if USE_FX_COLLECTION_RS
-                       fx_tg::Context* tg_cx,
+                       fx_tg::TranceGate* tg_cx,
 #else
                        fx_tg::context& tg_cx,
 #endif
@@ -212,7 +212,7 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
 //-----------------------------------------------------------------------------
 void output_step_pos_param(
 #if USE_FX_COLLECTION_RS
-    fx_tg::Context* cx,
+    fx_tg::TranceGate* cx,
 #else
     fx_tg::context& cx,
 #endif
@@ -234,7 +234,7 @@ void output_step_pos_param(
 //-----------------------------------------------------------------------------
 void process_audio_buffers(
 #if USE_FX_COLLECTION_RS
-    fx_tg::Context* cx,
+    fx_tg::TranceGate* cx,
 #else
     fx_tg::context& cx,
 #endif
