@@ -41,7 +41,7 @@ private:
         bool needs_trigger = true;
 
 #if USE_FX_COLLECTION_RS
-        fx_collection_rs::trance_gate::TrancerGate* fx_trance_gate_cx = nullptr;
+        fx_collection_rs::trance_gate::TranceGate* fx_trance_gate_cx = nullptr;
 #else
         fx_collection::trance_gate::context fx_trance_gate_cx =
             fx_collection::trance_gate::create();
