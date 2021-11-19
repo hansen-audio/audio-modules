@@ -194,10 +194,10 @@ void update_parameters(process_data::param_changes const& param_ins,
 //-----------------------------------------------------------------------------
 bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
 {
-    using audio_frame = fx_collection::audio_frame;
+    using AudioFrame = fx_collection::AudioFrame;
 
-    audio_frame frame = fx_collection::zero_audio_frame;
-    bool is_silent    = false;
+    AudioFrame frame = fx_collection::zero_audio_frame;
+    bool is_silent   = false;
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
         frame.data[0] = data.inputs[0][0][s];

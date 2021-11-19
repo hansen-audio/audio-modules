@@ -20,7 +20,7 @@ struct silence_detection final
     };
 
     static context create(real sample_rate, real duration_in_seconds);
-    static bool process(context& ctx, fx_collection::audio_frame const& frame);
+    static bool process(context& ctx, fx_collection::AudioFrame const& frame);
 };
 
 //-----------------------------------------------------------------------------

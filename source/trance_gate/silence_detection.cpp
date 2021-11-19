@@ -16,14 +16,14 @@ silence_detection::context silence_detection::create(real sample_rate,
 
 //-----------------------------------------------------------------------------
 bool silence_detection::process(context& ctx,
-                                fx_collection::audio_frame const& frame)
+                                fx_collection::AudioFrame const& frame)
 {
     constexpr auto THRESHOLD = 1e-9f;
 
     // Increment the silence counter...
     ctx.frames_of_silence++;
 
-    fx_collection::audio_frame sum{real(0.)};
+    fx_collection::AudioFrame sum{real(0.)};
     for (std::size_t s = 0; s < frame.data.size(); ++s)
     {
         sum.data[s] += std::abs(frame.data[s]);
