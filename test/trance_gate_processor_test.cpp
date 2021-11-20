@@ -56,7 +56,7 @@ TEST(audio_modules_test, test_allocation_free_trance_gate_constructor)
 TEST(audio_modules_test, test_allocation_free_process_setup)
 {
     auto ps = create_process_setup();
-    audio_modules::trance_gate::tg_processor tgp;
+    audio_modules::trance_gate::TranceGateModuleImpl tgp;
 
     thread_malloc_detector detector;
     tgp.setup_processing(ps);
@@ -66,7 +66,7 @@ TEST(audio_modules_test, test_allocation_free_process_setup)
 //-----------------------------------------------------------------------------
 TEST(audio_modules_test, test_allocation_free_process_audio)
 {
-    audio_modules::trance_gate::tg_processor tgp;
+    audio_modules::trance_gate::TranceGateModuleImpl tgp;
 
     auto ps = create_process_setup();
     tgp.setup_processing(ps);

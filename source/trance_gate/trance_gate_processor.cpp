@@ -11,20 +11,20 @@ namespace {
 //-----------------------------------------------------------------------------
 #if USE_FX_COLLECTION_RS
 namespace TranceGateImpl = fx_collection_rs::TranceGateImpl;
-using TranceGate         = fx_collection_rs::TranceGateImpl::TranceGate;
+using TranceGateFx       = fx_collection_rs::TranceGateImpl::TranceGate;
 using AudioFrame         = fx_collection_rs::TranceGateImpl::AudioFrame;
 #else
 using TranceGateImpl = fx_collection::TranceGateImpl;
-using TranceGate     = fx_collection::TranceGate;
+using TranceGateFx   = fx_collection::TranceGate;
 #endif
 
 //-----------------------------------------------------------------------------
 template <typename Func>
 void update_parameter(param_change const& param,
 #if USE_FX_COLLECTION_RS
-                      TranceGate* tg_cx,
+                      TranceGateFx* trance_gate_fx,
 #else
-                      TranceGate& tg_cx,
+                      TranceGateFx& trance_gate_fx,
 #endif
                       const Func& func)
 {
@@ -68,7 +68,8 @@ void update_parameter(param_change const& param,
             constexpr i32 LEFT_CH_IDX = 0;
 
             const auto tag = param.tag - tags::step_le_01;
-            TranceGateImpl::set_step(tg_cx, LEFT_CH_IDX, tag, param.value);
+            TranceGateImpl::set_step(
+                trance_gate_fx, LEFT_CH_IDX, tag, param.value);
             break;
         }
         case tags::step_ri_01:
@@ -106,11 +107,12 @@ void update_parameter(param_change const& param,
             constexpr i32 RIGHT_CH_IDX = 1;
 
             const auto tag = param.tag - tags::step_ri_01;
-            TranceGateImpl::set_step(tg_cx, RIGHT_CH_IDX, tag, param.value);
+            TranceGateImpl::set_step(
+                trance_gate_fx, RIGHT_CH_IDX, tag, param.value);
             break;
         }
         case tags::amount: {
-            TranceGateImpl::set_mix(tg_cx, param.value);
+            TranceGateImpl::set_mix(trance_gate_fx, param.value);
             break;
         }
         case tags::contour: {
@@ -118,7 +120,7 @@ void update_parameter(param_change const& param,
             static auto const& conv_funcs =
                 cfg::get_convert_functions(info.convert_tag);
 
-            TranceGateImpl::set_contour(tg_cx,
+            TranceGateImpl::set_contour(trance_gate_fx,
                                         conv_funcs.to_physical(param.value));
             break;
         }
@@ -130,7 +132,7 @@ void update_parameter(param_change const& param,
             auto const step_len =
                 cfg::get_speed(conv_funcs.to_physical(param.value));
 
-            TranceGateImpl::set_step_len(tg_cx, step_len);
+            TranceGateImpl::set_step_len(trance_gate_fx, step_len);
             break;
         }
         case tags::step_count: {
@@ -138,21 +140,21 @@ void update_parameter(param_change const& param,
             static auto const& conv_funcs =
                 cfg::get_convert_functions(info.convert_tag);
 
-            TranceGateImpl::set_step_count(tg_cx,
+            TranceGateImpl::set_step_count(trance_gate_fx,
                                            conv_funcs.to_physical(param.value));
             break;
         }
         case tags::mode: {
-            TranceGateImpl::set_stereo_mode(tg_cx,
+            TranceGateImpl::set_stereo_mode(trance_gate_fx,
                                             param.value > 0.5 ? true : false);
             break;
         }
         case tags::width: {
-            TranceGateImpl::set_width(tg_cx, param.value);
+            TranceGateImpl::set_width(trance_gate_fx, param.value);
             break;
         }
         case tags::shuffle: {
-            TranceGateImpl::set_shuffle_amount(tg_cx, param.value);
+            TranceGateImpl::set_shuffle_amount(trance_gate_fx, param.value);
             break;
         }
         case tags::fade_in: {
@@ -185,20 +187,21 @@ void update_parameter(param_change const& param,
 template <typename Func>
 void update_parameters(process_data::param_changes const& param_ins,
 #if USE_FX_COLLECTION_RS
-                       TranceGate* tg_cx,
+                       TranceGateFx* trance_gate_fx,
 #else
-                       TranceGate& tg_cx,
+                       TranceGateFx& trance_gate_fx,
 #endif
                        const Func& func)
 {
     for (const auto& pin : param_ins)
     {
-        update_parameter(pin, tg_cx, func);
+        update_parameter(pin, trance_gate_fx, func);
     }
 }
 
 //-----------------------------------------------------------------------------
-bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
+bool is_silent_input(process_data& data,
+                     silence_detection::context& silence_detection)
 {
     using AudioFrame = fx_collection::AudioFrame;
 
@@ -209,7 +212,7 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
         frame.data[0] = data.inputs[0][0][s];
         frame.data[1] = data.inputs[0][1][s];
 
-        is_silent = silence_detection::process(sd_cx, frame);
+        is_silent = silence_detection::process(silence_detection, frame);
     }
 
     return is_silent;
@@ -218,9 +221,9 @@ bool is_silent_input(process_data& data, silence_detection::context& sd_cx)
 //-----------------------------------------------------------------------------
 void output_step_pos_param(
 #if USE_FX_COLLECTION_RS
-    TranceGate* cx,
+    TranceGateFx* trance_gate_fx,
 #else
-    TranceGate& cx,
+    TranceGateFx& trance_gate_fx,
 #endif
     process_data& data)
 {
@@ -231,7 +234,7 @@ void output_step_pos_param(
     static auto const& conv_funcs =
         cfg::get_convert_functions(info.convert_tag);
 
-    i32 step_pos    = TranceGateImpl::get_step_pos(cx);
+    i32 step_pos    = TranceGateImpl::get_step_pos(trance_gate_fx);
     i32 index       = step_pos + 1; // non programming index!
     real norm_index = conv_funcs.to_normalised(index);
     data.param_outputs.push_back({tags::step_pos, norm_index});
@@ -240,9 +243,9 @@ void output_step_pos_param(
 //-----------------------------------------------------------------------------
 void process_audio_buffers(
 #if USE_FX_COLLECTION_RS
-    TranceGate* cx,
+    TranceGateFx* trance_gate_fx,
 #else
-    TranceGate& cx,
+    TranceGateFx& trance_gate_fx,
 #endif
     process_data& data)
 {
@@ -264,15 +267,15 @@ void process_audio_buffers(
         frame.data[L] = data.inputs[0][L][s];
         frame.data[R] = data.inputs[0][R][s];
 #if USE_FX_COLLECTION_RS
-        process(cx, &(frame.data), &(frame.data));
+        process(trance_gate_fx, &(frame.data), &(frame.data));
 #else
-        TranceGateImpl::process(cx, frame, frame);
+        TranceGateImpl::process(trance_gate_fx, frame, frame);
 #endif
         data.outputs[0][L][s] = frame.data[L];
         data.outputs[0][R][s] = frame.data[R];
     }
 
-    output_step_pos_param(cx, data);
+    output_step_pos_param(trance_gate_fx, data);
 }
 
 //-----------------------------------------------------------------------------
@@ -302,12 +305,12 @@ f64 compute_project_time_anchor(f64 project_time_music)
 } // namespace
 
 /**
- * tg_processor
+ * TranceGateModuleImpl
  */
-tg_processor::tg_processor()
+TranceGateModuleImpl::TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    cx.fx_trance_gate_cx = fx_collection_rs::TranceGateImpl::tg_create();
+    module.trance_gate_fx = fx_collection_rs::TranceGateImpl::tg_create();
 #endif
 
     for (param_info const& info : config::param_list)
@@ -315,7 +318,7 @@ tg_processor::tg_processor()
         // clang-format off
         update_parameter(
             {info.param_tag, info.default_normalised},
-            cx.fx_trance_gate_cx, 
+            module.trance_gate_fx, 
             [this](tag_type param_tag, real value) {
                 update_param(param_tag, value);
             });
@@ -324,18 +327,18 @@ tg_processor::tg_processor()
 }
 
 //-----------------------------------------------------------------------------
-tg_processor::~tg_processor()
+TranceGateModuleImpl::~TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::TranceGateImpl::tg_destroy(cx.fx_trance_gate_cx);
+    fx_collection_rs::TranceGateImpl::tg_destroy(module.trance_gate_fx);
 #endif
 }
 
 //-----------------------------------------------------------------------------
-bool tg_processor::process_audio(process_data& data)
+bool TranceGateModuleImpl::process_audio(process_data& data)
 {
     update_parameters(data.param_inputs,
-                      cx.fx_trance_gate_cx,
+                      module.trance_gate_fx,
                       [this](tag_type param_tag, real value) {
                           update_param(param_tag, value);
                       });
@@ -343,60 +346,61 @@ bool tg_processor::process_audio(process_data& data)
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    if (is_silent_input(data, cx.silence_detection_cx))
+    if (is_silent_input(data, module.silence_detection_cx))
     {
-        if (!cx.needs_trigger)
+        if (!module.needs_trigger)
         {
-            TranceGateImpl::reset_step_pos(cx.fx_trance_gate_cx, 0);
-            output_step_pos_param(cx.fx_trance_gate_cx, data);
+            TranceGateImpl::reset_step_pos(module.trance_gate_fx, 0);
+            output_step_pos_param(module.trance_gate_fx, data);
         }
 
-        if (!cx.needs_trigger)
-            cx.needs_trigger = true;
+        if (!module.needs_trigger)
+            module.needs_trigger = true;
 
         return true;
     }
 
-    if (cx.needs_trigger)
+    if (module.needs_trigger)
     {
-        cx.needs_trigger = false;
+        module.needs_trigger = false;
         TranceGateImpl::trigger(
-            cx.fx_trance_gate_cx, cx.delay_len, cx.fade_in_len);
+            module.trance_gate_fx, module.delay_len, module.fade_in_len);
 
-        cx.trigger_phase = compute_project_time_anchor(data.project_time_music);
+        module.trigger_phase =
+            compute_project_time_anchor(data.project_time_music);
     }
 
-    TranceGateImpl::set_tempo(cx.fx_trance_gate_cx, data.tempo);
+    TranceGateImpl::set_tempo(module.trance_gate_fx, data.tempo);
 
-    real ptm = data.project_time_music + cx.trigger_phase;
-    TranceGateImpl::update_project_time_music(cx.fx_trance_gate_cx, ptm);
+    real ptm = data.project_time_music + module.trigger_phase;
+    TranceGateImpl::update_project_time_music(module.trance_gate_fx, ptm);
 
-    process_audio_buffers(cx.fx_trance_gate_cx, data);
+    process_audio_buffers(module.trance_gate_fx, data);
 
     return true;
 }
 
 //-----------------------------------------------------------------------------
-void tg_processor::setup_processing(process_setup& setup)
+void TranceGateModuleImpl::setup_processing(process_setup& setup)
 {
-    TranceGateImpl::set_sample_rate(cx.fx_trance_gate_cx, setup.sample_rate);
+    TranceGateImpl::set_sample_rate(module.trance_gate_fx, setup.sample_rate);
 
     constexpr real RETRIGGER_TIMER = 0.5;
-    cx.silence_detection_cx =
+    module.silence_detection_cx =
         silence_detection::create(setup.sample_rate, RETRIGGER_TIMER);
 }
 
 //-----------------------------------------------------------------------------
-void tg_processor::update_param(tag_type param_tag, real value)
+void TranceGateModuleImpl::update_param(tag_type param_tag, real value)
 {
     using tags = config::param_tags;
     switch (param_tag)
     {
         case tags::fade_in:
-            cx.fade_in_len = value;
+            module.fade_in_len = value;
             break;
         case tags::delay:
-            cx.delay_len = value;
+            module.delay_len = value;
             break;
         default:
             break;

@@ -61,10 +61,10 @@ audio_module_ptr module_factory::create_audio_module(module_tags tag)
     switch (tag)
     {
         case module_tags::TRANCE_GATE:
-            return std::make_unique<trance_gate::tg_processor>();
+            return std::make_unique<trance_gate::TranceGateModuleImpl>();
             break;
         default:
-            return std::make_unique<trance_gate::tg_processor>();
+            return std::make_unique<trance_gate::TranceGateModuleImpl>();
     }
 }
 

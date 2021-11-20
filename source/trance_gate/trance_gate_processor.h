@@ -7,7 +7,7 @@
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 
-// #define USE_FX_COLLECTION_RS 1
+#define USE_FX_COLLECTION_RS 1
 #if USE_FX_COLLECTION_RS
 #include "fx-collection-rs_bindings.h"
 #endif
@@ -16,14 +16,31 @@ namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 /**
- * tg_processor
+ * TranceGateModuleImpl
  */
-class tg_processor final : public module
+
+struct TranceGateModule
+{
+    mut_real delay_len     = real(0.);
+    mut_real fade_in_len   = real(0.);
+    mut_real trigger_phase = real(0.);
+    silence_detection::context silence_detection_cx;
+    bool needs_trigger = true;
+
+#if USE_FX_COLLECTION_RS
+    fx_collection_rs::TranceGateImpl::TranceGate* trance_gate_fx = nullptr;
+#else
+    fx_collection::TranceGate trance_gate_fx =
+        fx_collection::TranceGateImpl::create();
+#endif
+};
+
+class TranceGateModuleImpl final : public module
 {
 public:
     //-------------------------------------------------------------------------
-    tg_processor();
-    ~tg_processor() override;
+    TranceGateModuleImpl();
+    ~TranceGateModuleImpl() override;
 
     bool process_audio(process_data& data) override;
     void setup_processing(process_setup& setup) override;
@@ -34,22 +51,9 @@ private:
 
     struct context
     {
-        mut_real delay_len     = real(0.);
-        mut_real fade_in_len   = real(0.);
-        mut_real trigger_phase = real(0.);
-        silence_detection::context silence_detection_cx;
-        bool needs_trigger = true;
-
-#if USE_FX_COLLECTION_RS
-        fx_collection_rs::TranceGateImpl::TranceGate* fx_trance_gate_cx =
-            nullptr;
-#else
-        fx_collection::TranceGate fx_trance_gate_cx =
-            fx_collection::TranceGateImpl::create();
-#endif
     };
 
-    context cx;
+    TranceGateModule module;
 };
 
 //-----------------------------------------------------------------------------
