@@ -7,7 +7,7 @@
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 
-#define USE_FX_COLLECTION_RS 1
+// #define USE_FX_COLLECTION_RS 1
 #if USE_FX_COLLECTION_RS
 #include "fx-collection-rs_bindings.h"
 #endif
@@ -41,10 +41,11 @@ private:
         bool needs_trigger = true;
 
 #if USE_FX_COLLECTION_RS
-        fx_collection_rs::trance_gate::TranceGate* fx_trance_gate_cx = nullptr;
+        fx_collection_rs::TranceGateImpl::TranceGate* fx_trance_gate_cx =
+            nullptr;
 #else
-        fx_collection::trance_gate::context fx_trance_gate_cx =
-            fx_collection::trance_gate::create();
+        fx_collection::TranceGate fx_trance_gate_cx =
+            fx_collection::TranceGateImpl::create();
 #endif
     };
 
