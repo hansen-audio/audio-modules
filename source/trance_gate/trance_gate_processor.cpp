@@ -310,7 +310,7 @@ f64 compute_project_time_anchor(f64 project_time_music)
 TranceGateModuleImpl::TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    module.trance_gate_fx = fx_collection_rs::TranceGateImpl::tg_create();
+    module.trance_gate_fx = fx_collection_rs::TranceGateImpl::create();
 #endif
 
     for (param_info const& info : config::param_list)
@@ -330,7 +330,7 @@ TranceGateModuleImpl::TranceGateModuleImpl()
 TranceGateModuleImpl::~TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::TranceGateImpl::tg_destroy(module.trance_gate_fx);
+    fx_collection_rs::TranceGateImpl::destroy(module.trance_gate_fx);
 #endif
 }
 
