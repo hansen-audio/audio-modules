@@ -10,32 +10,32 @@ namespace ha::audio_modules {
 /**
  * module_factory
  */
-template <typename AudioModuleConfig>
-static const param_infos_list build_param_infos()
+template <typename TAudioModuleConfig>
+static const ParamInfosList build_param_infos()
 {
-    return {AudioModuleConfig::param_list.begin(),
-            AudioModuleConfig::param_list.end()};
+    return {TAudioModuleConfig::param_list.begin(),
+            TAudioModuleConfig::param_list.end()};
 }
 
 //-----------------------------------------------------------------------------
-template <typename AudioModuleConfig>
-static const convert_funcs_list build_convert_funcs()
+template <typename TAudioModuleConfig>
+static const ConvertFuncsList build_convert_funcs()
 {
-    convert_funcs_list list;
-    for (size_t i = 0; i < AudioModuleConfig::convert_tags::count; ++i)
+    ConvertFuncsList list;
+    for (size_t i = 0; i < TAudioModuleConfig::ConvertTags::count; ++i)
     {
-        list.push_back(AudioModuleConfig::get_convert_functions(i));
+        list.push_back(TAudioModuleConfig::get_convert_functions(i));
     }
     return list;
 }
 
 //-----------------------------------------------------------------------------
-param_infos_list const module_factory::param_infos(module_tags tag)
+ParamInfosList const ModuleFactoryImpl::param_infos(ModuleTags tag)
 {
     switch (tag)
     {
-        case module_tags::TRANCE_GATE: {
-            return build_param_infos<trance_gate::config>();
+        case ModuleTags::TranceGate: {
+            return build_param_infos<trance_gate::Config>();
         }
     }
 
@@ -43,12 +43,12 @@ param_infos_list const module_factory::param_infos(module_tags tag)
 }
 
 //-----------------------------------------------------------------------------
-convert_funcs_list const module_factory::convert_funcs(module_tags tag)
+ConvertFuncsList const ModuleFactoryImpl::convert_funcs(ModuleTags tag)
 {
     switch (tag)
     {
-        case module_tags::TRANCE_GATE: {
-            return build_convert_funcs<trance_gate::config>();
+        case ModuleTags::TranceGate: {
+            return build_convert_funcs<trance_gate::Config>();
         }
     }
 
@@ -56,11 +56,11 @@ convert_funcs_list const module_factory::convert_funcs(module_tags tag)
 }
 
 //-----------------------------------------------------------------------------
-audio_module_ptr module_factory::create_audio_module(module_tags tag)
+audio_module_ptr ModuleFactoryImpl::create_audio_module(ModuleTags tag)
 {
     switch (tag)
     {
-        case module_tags::TRANCE_GATE:
+        case ModuleTags::TranceGate:
             return std::make_unique<trance_gate::TranceGateModuleImpl>();
             break;
         default:

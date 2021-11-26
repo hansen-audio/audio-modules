@@ -10,7 +10,7 @@ namespace ha::audio_modules {
 /**
  * param_info
  */
-struct param_info
+struct ParamInfo
 {
     static constexpr tag_type INVALID_PARAM_TAG   = -1;
     static constexpr tag_type INVALID_CONVERT_TAG = -1;

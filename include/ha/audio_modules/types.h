@@ -30,15 +30,15 @@ using string_view = std::string_view const;
 
 using string = std::string const;
 
-using param_infos_list   = std::vector<struct param_info>;
-using convert_funcs_list = std::vector<struct convert_funcs>;
+using ParamInfosList   = std::vector<struct ParamInfo>;
+using ConvertFuncsList = std::vector<struct ConverterFuncs>;
 
 using sample = mut_real;
 
 using allocator_r16 = alignment::aligned_allocator<sample, 16>;
-using audio_channel = std::vector<sample, allocator_r16>;
-using audio_bus     = std::vector<audio_channel>;
-using audio_busses  = std::vector<audio_bus>;
+using AudioChannel  = std::vector<sample, allocator_r16>;
+using AudioBus      = std::vector<AudioChannel>;
+using AudioBusses   = std::vector<AudioBus>;
 
 //------------------------------------------------------------------------
 } // namespace ha::audio_modules

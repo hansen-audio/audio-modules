@@ -13,10 +13,10 @@ namespace {
 //-----------------------------------------------------------------------------
 TEST(module_factory_test, test_get_param_infos)
 {
-    using mf   = audio_modules::module_factory;
-    using tags = audio_modules::module_tags;
+    using mf   = audio_modules::ModuleFactoryImpl;
+    using tags = audio_modules::ModuleTags;
 
-    auto const param_infos = mf::param_infos(tags::TRANCE_GATE);
+    auto const param_infos = mf::param_infos(tags::TranceGate);
     EXPECT_FALSE(param_infos.empty());
 }
 

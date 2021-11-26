@@ -10,18 +10,18 @@ namespace ha::audio_modules {
 /**
  * params_data
  */
-struct param_change
+struct ParamChange
 {
     mut_tag_type tag = -1;
     mut_real value   = real(0.);
 };
 
 /**
- * process_data
+ * ProcessData
  */
-struct process_data
+struct ProcessData
 {
-    using param_changes = std::vector<param_change>;
+    using param_changes = std::vector<ParamChange>;
 
     mut_real sample_rate           = real(44100.);
     mut_real oversampling_factor   = real(1.);
@@ -30,8 +30,8 @@ struct process_data
     mut_i64 continous_time_samples = 0;
     mut_f64 project_time_music     = mut_f64(1.);
 
-    audio_busses inputs;
-    audio_busses outputs;
+    AudioBusses inputs;
+    AudioBusses outputs;
     param_changes param_inputs;
     param_changes param_outputs;
 };
@@ -39,7 +39,7 @@ struct process_data
 /**
  * process_setup
  */
-struct process_setup
+struct ProcessSetup
 {
     real sample_rate   = real(44100.);
     i32 block_size     = 64;
@@ -49,12 +49,12 @@ struct process_setup
 /**
  * module
  */
-struct module
+struct ModuleImpl
 {
-    virtual void setup_processing(process_setup& setup) = 0;
-    virtual bool process_audio(process_data& data)      = 0;
+    virtual void setup_processing(ProcessSetup& setup) = 0;
+    virtual bool process_audio(ProcessData& data)      = 0;
 
-    virtual ~module() {}
+    virtual ~ModuleImpl() {}
 };
 
 //-----------------------------------------------------------------------------

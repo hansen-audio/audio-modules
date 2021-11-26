@@ -12,17 +12,17 @@
 namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
-using audio_module_ptr = std::unique_ptr<module>;
+using audio_module_ptr = std::unique_ptr<ModuleImpl>;
 
 //-----------------------------------------------------------------------------
 /**
  * module_factory
  */
-struct module_factory
+struct ModuleFactoryImpl
 {
-    static param_infos_list const param_infos(module_tags tag);
-    static convert_funcs_list const convert_funcs(module_tags tag);
-    static audio_module_ptr create_audio_module(module_tags tag);
+    static ParamInfosList const param_infos(ModuleTags tag);
+    static ConvertFuncsList const convert_funcs(ModuleTags tag);
+    static audio_module_ptr create_audio_module(ModuleTags tag);
 };
 
 //-----------------------------------------------------------------------------

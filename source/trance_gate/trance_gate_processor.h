@@ -24,7 +24,7 @@ struct TranceGateModule
     mut_real delay_len     = real(0.);
     mut_real fade_in_len   = real(0.);
     mut_real trigger_phase = real(0.);
-    silence_detection::context silence_detection_cx;
+    SilenceDetection silence_detection;
     bool needs_trigger = true;
 
 #if USE_FX_COLLECTION_RS
@@ -35,23 +35,19 @@ struct TranceGateModule
 #endif
 };
 
-class TranceGateModuleImpl final : public module
+class TranceGateModuleImpl final : public ModuleImpl
 {
 public:
     //-------------------------------------------------------------------------
     TranceGateModuleImpl();
     ~TranceGateModuleImpl() override;
 
-    bool process_audio(process_data& data) override;
-    void setup_processing(process_setup& setup) override;
+    bool process_audio(ProcessData& data) override;
+    void setup_processing(ProcessSetup& setup) override;
 
     //-------------------------------------------------------------------------
 private:
     void update_param(tag_type param_tag, real value);
-
-    struct context
-    {
-    };
 
     TranceGateModule module;
 };

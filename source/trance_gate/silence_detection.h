@@ -8,19 +8,26 @@
 namespace ha::audio_modules::trance_gate {
 
 /**
+ * @brief SilenceDetection
+ *
+ */
+struct SilenceDetection
+{
+    mut_real duration_in_samples = 44100.;
+    mut_i32 frames_of_silence    = 0;
+};
+
+/**
  * @brief Detecting silence
  *
  */
-struct silence_detection final
+struct SilenceDetectionImpl final
 {
-    struct context
-    {
-        mut_real duration_in_samples = 44100.;
-        mut_i32 frames_of_silence    = 0;
-    };
+    using Self = SilenceDetection;
 
-    static context create(real sample_rate, real duration_in_seconds);
-    static bool process(context& ctx, fx_collection::AudioFrame const& frame);
+    static Self create(real sample_rate, real duration_in_seconds);
+    static bool process(Self& silence_detection,
+                        fx_collection::AudioFrame const& frame);
 };
 
 //-----------------------------------------------------------------------------

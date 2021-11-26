@@ -12,13 +12,13 @@ using namespace ha;
 namespace {
 
 //-----------------------------------------------------------------------------
-audio_modules::process_data create_process_data()
+audio_modules::ProcessData create_process_data()
 {
     constexpr audio_modules::i32 sample_count         = 32;
     constexpr audio_modules::i32 input_channel_count  = 2;
     constexpr audio_modules::i32 output_channel_count = 2;
 
-    audio_modules::process_data data;
+    audio_modules::ProcessData data;
 
     data.num_samples = sample_count;
     data.inputs.resize(1);
@@ -35,7 +35,7 @@ audio_modules::process_data create_process_data()
 }
 
 //-----------------------------------------------------------------------------
-audio_modules::process_setup create_process_setup()
+audio_modules::ProcessSetup create_process_setup()
 {
     return {/*setup.sample_rate   =*/audio_modules::real(44100.),
             /*setup.block_size    =*/32,
@@ -87,30 +87,30 @@ TEST(audio_modules_test, test_allocation_free_process_audio)
 //-----------------------------------------------------------------------------
 TEST(audio_modules_factory_test, test_trance_gate_mod_infos)
 {
-    using amf = audio_modules::module_factory;
+    using amf = audio_modules::ModuleFactoryImpl;
     const auto mod_infos =
-        amf::param_infos(audio_modules::module_tags::TRANCE_GATE);
+        amf::param_infos(audio_modules::ModuleTags::TranceGate);
     const auto converters =
-        amf::convert_funcs(audio_modules::module_tags::TRANCE_GATE);
+        amf::convert_funcs(audio_modules::ModuleTags::TranceGate);
     auto const converter =
-        converters.at(audio_modules::trance_gate::config::convert_tags::speed);
+        converters.at(audio_modules::trance_gate::config::ConvertTags::speed);
     if (converter.num_steps)
         auto num_steps = converter.num_steps();
 
     auto tg_node =
-        amf::create_audio_module(audio_modules::module_tags::TRANCE_GATE);
+        amf::create_audio_module(audio_modules::ModuleTags::TranceGate);
 }
 
 //-----------------------------------------------------------------------------
 TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
 {
-    using amf = audio_modules::module_factory;
+    using amf = audio_modules::ModuleFactoryImpl;
     const auto mod_infos =
-        amf::param_infos(audio_modules::module_tags::TRANCE_GATE);
+        amf::param_infos(audio_modules::ModuleTags::TranceGate);
     const auto converters =
-        amf::convert_funcs(audio_modules::module_tags::TRANCE_GATE);
+        amf::convert_funcs(audio_modules::ModuleTags::TranceGate);
     auto const converter = converters.at(
-        audio_modules::trance_gate::config::convert_tags::step_count);
+        audio_modules::trance_gate::config::ConvertTags::step_count);
 
     const auto phys   = converter.to_physical(0.0322);
     int const rounded = static_cast<int>(phys);

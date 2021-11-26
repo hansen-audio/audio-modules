@@ -109,7 +109,7 @@ using sync_mode_type =
 using on_off_type =
     ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
 using converter_list_type =
-    std::array<const convert_funcs, config::convert_tags::count>;
+    std::array<const ConverterFuncs, Config::ConvertTags::count>;
 
 static percent_type const percent_converter;
 static log_type const contour_converter(4., 0.001, 0.25);
@@ -123,14 +123,14 @@ static sync_mode_type const sync_mode_converter(sync_mode_strings);
 
 // clang-format off
 static converter_list_type const convert_list = {{
-    {   // convert_tags::normalised
+    {   // ConvertTags::normalised
         /*to_physical   = */ [](real norm) { return norm; },
         /*to_normalised = */ [](real phys) { return phys; },
         /*to_string     = */ [](real phys) { return std::to_string(phys); },
         /*from_string   = */ [](string string) { return std::stof (string); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
-    {   // convert_tags::percent
+    {   // ConvertTags::percent
         /*to_physical   = */ [](real norm) { return percent_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return percent_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) { 
@@ -142,7 +142,7 @@ static converter_list_type const convert_list = {{
         /*from_string   = */ [](string string) { return percent_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
-    {   // convert_tags::contour
+    {   // ConvertTags::contour
         /*to_physical   = */ [](real norm) { return contour_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return contour_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) {
@@ -154,21 +154,21 @@ static converter_list_type const convert_list = {{
         /*from_string   = */ [](string string) { return contour_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
-    {   // convert_tags::speed
+    {   // ConvertTags::speed
         /*to_physical   = */ [](real norm) { return speed_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return speed_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) { return speed_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return speed_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return speed_values.size() - 1; }
     },
-    {   // convert_tags::delay_fade_length
+    {   // ConvertTags::delay_fade_length
         /*to_physical   = */ [](real norm) { return delay_fade_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return delay_fade_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) { return delay_fade_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return delay_fade_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return delay_fade_len_values.size() - 1; }
     },
-    {   // convert_tags::step_count
+    {   // ConvertTags::step_count
         /*to_physical   = */ [](real norm) { return step_count_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return step_count_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) {
@@ -183,21 +183,21 @@ static converter_list_type const convert_list = {{
         /*num_steps     = */ []() -> i32   { return step_count_converter.to_physical(1.)
                                                     - step_count_converter.to_physical(0.); }
     },
-    {   // convert_tags::mono_stereo
+    {   // ConvertTags::mono_stereo
         /*to_physical   = */ [](real norm) { return mono_mode_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return mono_mode_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) { return mono_mode_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return mono_mode_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return mono_mode_strings.size() - 1; }
     },
-    {   // convert_tags::sync_mode
+    {   // ConvertTags::sync_mode
         /*to_physical   = */ [](real norm) { return sync_mode_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return sync_mode_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) { return sync_mode_converter.to_string(phys); },
         /*from_string   = */ [](string string) { return sync_mode_converter.from_string(string); },
         /*num_steps     = */ []() -> i32   { return sync_mode_strings.size() - 1; }
     },
-    {   // convert_tags::step_pos
+    {   // ConvertTags::step_pos
         /*to_physical   = */ [](real norm) { return step_pos_converter.to_physical(norm); },
         /*to_normalised = */ [](real phys) { return step_pos_converter.to_normalized(phys); },
         /*to_string     = */ [](real phys) {
@@ -215,23 +215,23 @@ static converter_list_type const convert_list = {{
 }};
 // clang-format on
 
-static_assert(convert_list.size() == config::convert_tags::count);
+static_assert(convert_list.size() == Config::ConvertTags::count);
 
 //-----------------------------------------------------------------------------
-convert_funcs const& config::get_convert_functions(tag_type convert_tag)
+ConverterFuncs const& Config::get_convert_functions(tag_type convert_tag)
 {
     return convert_list.at(convert_tag);
 }
 
 //-----------------------------------------------------------------------------
-real config::get_speed(real value)
+real Config::get_speed(real value)
 {
     size_t const index = static_cast<size_t>(value);
     return speed_values.at(index);
 }
 
 //-----------------------------------------------------------------------------
-real config::get_delay_fade_len(real value)
+real Config::get_delay_fade_len(real value)
 {
     size_t const index = static_cast<size_t>(value);
     return delay_fade_len_values.at(index);

@@ -8,9 +8,9 @@ namespace ha::audio_modules {
 /**
  * module_tags
  */
-enum class module_tags
+enum class ModuleTags
 {
-    TRANCE_GATE
+    TranceGate
 };
 
 //-----------------------------------------------------------------------------

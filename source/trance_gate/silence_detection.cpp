@@ -7,21 +7,21 @@
 namespace ha::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
-silence_detection::context silence_detection::create(real sample_rate,
-                                                     real duration_in_seconds)
+SilenceDetection SilenceDetectionImpl::create(real sample_rate,
+                                              real duration_in_seconds)
 {
-    context ctx{sample_rate * duration_in_seconds};
-    return ctx;
+    SilenceDetection silence_detection{sample_rate * duration_in_seconds};
+    return silence_detection;
 }
 
 //-----------------------------------------------------------------------------
-bool silence_detection::process(context& ctx,
-                                fx_collection::AudioFrame const& frame)
+bool SilenceDetectionImpl::process(Self& self,
+                                   fx_collection::AudioFrame const& frame)
 {
     constexpr auto THRESHOLD = 1e-9f;
 
     // Increment the silence counter...
-    ctx.frames_of_silence++;
+    self.frames_of_silence++;
 
     fx_collection::AudioFrame sum{real(0.)};
     for (std::size_t s = 0; s < frame.data.size(); ++s)
@@ -30,13 +30,13 @@ bool silence_detection::process(context& ctx,
         if (sum.data[s] >= THRESHOLD)
         {
             //...but set it back to zero when there is noise.
-            ctx.frames_of_silence = 0;
+            self.frames_of_silence = 0;
             break;
         }
     }
 
     // When the counter reaches the duration specified, it is silent.
-    return ctx.frames_of_silence > ctx.duration_in_samples;
+    return self.frames_of_silence > self.duration_in_samples;
 }
 
 //-----------------------------------------------------------------------------

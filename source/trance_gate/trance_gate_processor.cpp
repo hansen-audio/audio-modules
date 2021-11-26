@@ -20,7 +20,7 @@ using TranceGateFx   = fx_collection::TranceGate;
 
 //-----------------------------------------------------------------------------
 template <typename Func>
-void update_parameter(param_change const& param,
+void update_parameter(ParamChange const& param,
 #if USE_FX_COLLECTION_RS
                       TranceGateFx* trance_gate_fx,
 #else
@@ -28,8 +28,8 @@ void update_parameter(param_change const& param,
 #endif
                       const Func& func)
 {
-    using cfg  = trance_gate::config;
-    using tags = cfg::param_tags;
+    using cfg  = trance_gate::Config;
+    using tags = cfg::ParamTags;
 
     switch (param.tag)
     {
@@ -185,7 +185,7 @@ void update_parameter(param_change const& param,
 
 //-----------------------------------------------------------------------------
 template <typename Func>
-void update_parameters(process_data::param_changes const& param_ins,
+void update_parameters(ProcessData::param_changes const& param_ins,
 #if USE_FX_COLLECTION_RS
                        TranceGateFx* trance_gate_fx,
 #else
@@ -200,8 +200,7 @@ void update_parameters(process_data::param_changes const& param_ins,
 }
 
 //-----------------------------------------------------------------------------
-bool is_silent_input(process_data& data,
-                     silence_detection::context& silence_detection)
+bool is_silent_input(ProcessData& data, SilenceDetection& silence_detection)
 {
     using AudioFrame = fx_collection::AudioFrame;
 
@@ -212,7 +211,7 @@ bool is_silent_input(process_data& data,
         frame.data[0] = data.inputs[0][0][s];
         frame.data[1] = data.inputs[0][1][s];
 
-        is_silent = silence_detection::process(silence_detection, frame);
+        is_silent = SilenceDetectionImpl::process(silence_detection, frame);
     }
 
     return is_silent;
@@ -225,10 +224,10 @@ void output_step_pos_param(
 #else
     TranceGateFx& trance_gate_fx,
 #endif
-    process_data& data)
+    ProcessData& data)
 {
-    using cfg  = trance_gate::config;
-    using tags = cfg::param_tags;
+    using cfg  = trance_gate::Config;
+    using tags = cfg::ParamTags;
 
     static auto constexpr info = cfg::param_list.at(tags::step_pos);
     static auto const& conv_funcs =
@@ -247,7 +246,7 @@ void process_audio_buffers(
 #else
     TranceGateFx& trance_gate_fx,
 #endif
-    process_data& data)
+    ProcessData& data)
 {
     constexpr i32 L = 0;
     constexpr i32 R = 1;
@@ -313,7 +312,7 @@ TranceGateModuleImpl::TranceGateModuleImpl()
     module.trance_gate_fx = fx_collection_rs::TranceGateImpl::create();
 #endif
 
-    for (param_info const& info : config::param_list)
+    for (ParamInfo const& info : Config::param_list)
     {
         // clang-format off
         update_parameter(
@@ -335,7 +334,7 @@ TranceGateModuleImpl::~TranceGateModuleImpl()
 }
 
 //-----------------------------------------------------------------------------
-bool TranceGateModuleImpl::process_audio(process_data& data)
+bool TranceGateModuleImpl::process_audio(ProcessData& data)
 {
     update_parameters(data.param_inputs,
                       module.trance_gate_fx,
@@ -346,7 +345,7 @@ bool TranceGateModuleImpl::process_audio(process_data& data)
     if (data.inputs.size() == 0 || data.outputs.size() == 0)
         return true;
 
-    if (is_silent_input(data, module.silence_detection_cx))
+    if (is_silent_input(data, module.silence_detection))
     {
         if (!module.needs_trigger)
         {
@@ -381,19 +380,19 @@ bool TranceGateModuleImpl::process_audio(process_data& data)
 }
 
 //-----------------------------------------------------------------------------
-void TranceGateModuleImpl::setup_processing(process_setup& setup)
+void TranceGateModuleImpl::setup_processing(ProcessSetup& setup)
 {
     TranceGateImpl::set_sample_rate(module.trance_gate_fx, setup.sample_rate);
 
     constexpr real RETRIGGER_TIMER = 0.5;
-    module.silence_detection_cx =
-        silence_detection::create(setup.sample_rate, RETRIGGER_TIMER);
+    module.silence_detection =
+        SilenceDetectionImpl::create(setup.sample_rate, RETRIGGER_TIMER);
 }
 
 //-----------------------------------------------------------------------------
 void TranceGateModuleImpl::update_param(tag_type param_tag, real value)
 {
-    using tags = config::param_tags;
+    using tags = Config::ParamTags;
     switch (param_tag)
     {
         case tags::fade_in:

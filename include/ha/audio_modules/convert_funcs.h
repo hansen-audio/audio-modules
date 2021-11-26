@@ -9,9 +9,9 @@ namespace ha::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
- * convert_funcs
+ * ConverterFuncs
  */
-struct convert_funcs
+struct ConverterFuncs
 {
     using to_physical_func   = std::function<real(real)>;
     using to_string_func     = std::function<string(real)>;
