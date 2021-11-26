@@ -73,11 +73,11 @@ TEST(audio_modules_test, test_allocation_free_process_audio)
 
     auto pd = create_process_data();
     pd.param_inputs.push_back(
-        {audio_modules::trance_gate::config::param_tags::contour, 1.0});
+        {audio_modules::trance_gate::Config::ParamTags::contour, 1.0});
     pd.param_inputs.push_back(
-        {audio_modules::trance_gate::config::param_tags::amount, 1.0});
+        {audio_modules::trance_gate::Config::ParamTags::amount, 1.0});
     pd.param_inputs.push_back(
-        {audio_modules::trance_gate::config::param_tags::speed, 1.0});
+        {audio_modules::trance_gate::Config::ParamTags::speed, 1.0});
 
     thread_malloc_detector detector;
     tgp.process_audio(pd);
@@ -93,7 +93,7 @@ TEST(audio_modules_factory_test, test_trance_gate_mod_infos)
     const auto converters =
         amf::convert_funcs(audio_modules::ModuleTags::TranceGate);
     auto const converter =
-        converters.at(audio_modules::trance_gate::config::ConvertTags::speed);
+        converters.at(audio_modules::trance_gate::Config::ConvertTags::speed);
     if (converter.num_steps)
         auto num_steps = converter.num_steps();
 
@@ -110,7 +110,7 @@ TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
     const auto converters =
         amf::convert_funcs(audio_modules::ModuleTags::TranceGate);
     auto const converter = converters.at(
-        audio_modules::trance_gate::config::ConvertTags::step_count);
+        audio_modules::trance_gate::Config::ConvertTags::step_count);
 
     const auto phys   = converter.to_physical(0.0322);
     int const rounded = static_cast<int>(phys);
