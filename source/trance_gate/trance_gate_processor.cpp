@@ -330,7 +330,8 @@ TranceGateModuleImpl::TranceGateModuleImpl()
 TranceGateModuleImpl::~TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::TranceGateImpl::destroy(module.trance_gate_fx);
+    fx_collection_rs::TranceGateImpl::destroy_trance_gate(
+        module.trance_gate_fx);
 #endif
 }
 
