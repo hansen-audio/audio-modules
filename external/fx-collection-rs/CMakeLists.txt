@@ -17,5 +17,5 @@ corrosion_import_crate(MANIFEST_PATH ${fx-collection-rs_SOURCE_DIR}/Cargo.toml)
 
 target_include_directories(fx-collection-rs 
     INTERFACE 
-        ${fx-collection-rs_SOURCE_DIR}
+        ${fx-collection-rs_SOURCE_DIR}/include
 )
