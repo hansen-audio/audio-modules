@@ -28,7 +28,7 @@ struct TranceGateModule
     bool needs_trigger = true;
 
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::TranceGateImpl::TranceGate* trance_gate_fx = nullptr;
+    fx_collection_rs::TranceGate* trance_gate_fx = nullptr;
 #else
     fx_collection::TranceGate trance_gate_fx =
         fx_collection::TranceGateImpl::create();

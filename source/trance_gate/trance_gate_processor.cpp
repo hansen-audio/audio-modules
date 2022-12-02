@@ -10,9 +10,9 @@ namespace {
 
 //-----------------------------------------------------------------------------
 #if USE_FX_COLLECTION_RS
-namespace TranceGateImpl = fx_collection_rs::TranceGateImpl;
-using TranceGateFx       = fx_collection_rs::TranceGateImpl::TranceGate;
-using AudioFrame         = fx_collection_rs::TranceGateImpl::AudioFrame;
+namespace TranceGateImpl = fx_collection_rs;
+using TranceGateFx       = fx_collection_rs::TranceGate;
+using AudioFrame         = fx_collection_rs::AudioFrame;
 #else
 using TranceGateImpl = fx_collection::TranceGateImpl;
 using TranceGateFx   = fx_collection::TranceGate;
@@ -309,8 +309,7 @@ f64 compute_project_time_anchor(f64 project_time_music)
 TranceGateModuleImpl::TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    module.trance_gate_fx =
-        fx_collection_rs::TranceGateImpl::create_trance_gate();
+    module.trance_gate_fx = fx_collection_rs::create_trance_gate();
 #endif
 
     for (ParamInfo const& info : Config::param_list)
@@ -330,8 +329,7 @@ TranceGateModuleImpl::TranceGateModuleImpl()
 TranceGateModuleImpl::~TranceGateModuleImpl()
 {
 #if USE_FX_COLLECTION_RS
-    fx_collection_rs::TranceGateImpl::destroy_trance_gate(
-        module.trance_gate_fx);
+    fx_collection_rs::destroy_trance_gate(module.trance_gate_fx);
 #endif
 }
 
