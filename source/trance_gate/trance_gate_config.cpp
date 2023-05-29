@@ -4,9 +4,6 @@
 #include "ha/audio_modules/convert_funcs.h"
 #include "ha/audio_modules/param_info.h"
 #include "ha/audio_modules/types.h"
-#include "ha/param_tool_box/convert/logarithmic.h"
-#include "ha/param_tool_box/convert/percent.h"
-#include "ha/param_tool_box/convert/string_list.h"
 #include <algorithm>
 #include <memory>
 
@@ -98,33 +95,14 @@ static_assert(speed_values.size() == speed_strings.size());
 
 //-----------------------------------------------------------------------------
 // clang-format on
-using percent_type = ptb::convert::percent<mut_real>;
-using log_type     = ptb::convert::logarithmic<mut_real>;
-using lin_type     = ptb::convert::linear<mut_real>;
-using speed_type = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
-using dly_fad_type =
-    ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
-using mono_mode_type =
-    ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
-using sync_mode_type =
-    ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
-using on_off_type =
-    ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
+
 using converter_list_type =
     std::array<const ConverterFuncs, Config::ConvertTags::count>;
 
-static percent_type const percent_converter;
-static log_type const contour_converter(4., 0.001, 0.25);
-static speed_type const speed_converter(speed_strings);
-static dly_fad_type const delay_fade_converter(delay_fade_len_strings);
-static lin_type const step_count_converter(2, 32);
-static lin_type const step_pos_converter(1, 32);
-static mono_mode_type const mono_mode_converter(mono_mode_strings);
-static on_off_type const on_off_converter(on_off_strings);
-static sync_mode_type const sync_mode_converter(sync_mode_strings);
+#define PARAM_TOOL_BOX_RS 1
 
 // clang-format off
-#if 1
+#if PARAM_TOOL_BOX_RS
 #include "hao/param-tool-box-rs/cbindings.h"
 using namespace hao;
 namespace ptb_rs = param_tool_box_rs;
@@ -230,6 +208,33 @@ static converter_list_type const convert_list = {{
     },
 }};
 #else
+#include "ha/param_tool_box/convert/logarithmic.h"
+#include "ha/param_tool_box/convert/percent.h"
+#include "ha/param_tool_box/convert/string_list.h"
+
+using percent_type = ptb::convert::percent<mut_real>;
+using log_type     = ptb::convert::logarithmic<mut_real>;
+using lin_type     = ptb::convert::linear<mut_real>;
+using speed_type = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
+using dly_fad_type =
+    ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
+using mono_mode_type =
+    ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
+using sync_mode_type =
+    ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
+using on_off_type =
+    ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
+
+static percent_type const percent_converter;
+static log_type const contour_converter(4., 0.001, 0.25);
+static speed_type const speed_converter(speed_strings);
+static dly_fad_type const delay_fade_converter(delay_fade_len_strings);
+static lin_type const step_count_converter(2, 32);
+static lin_type const step_pos_converter(1, 32);
+static mono_mode_type const mono_mode_converter(mono_mode_strings);
+static on_off_type const on_off_converter(on_off_strings);
+static sync_mode_type const sync_mode_converter(sync_mode_strings);
+
 static converter_list_type const convert_list = {{
     {   // ConvertTags::normalised
         /*to_physical   = */ [](real norm) { return norm; },
