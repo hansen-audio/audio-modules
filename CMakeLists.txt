@@ -34,6 +34,7 @@ target_link_libraries(audio-modules
         fx-collection
         fx-collection-rs
         param-tool-box
+        param-tool-box-rs
 )
 
 target_compile_features(audio-modules
