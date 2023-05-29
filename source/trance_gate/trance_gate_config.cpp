@@ -177,58 +177,56 @@ static converter_list_type const convert_list = {{
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(percent_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return display_string(percent_rs.get(), phys, phys < 100. ? 2 : 1); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(percent_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return 0; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(percent_rs.get()); }
     },
     {   // ConvertTags::contour
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(contour_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(contour_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return display_string(contour_rs.get(), phys, 3); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(contour_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return 0; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(contour_rs.get()); }
     },
     {   // ConvertTags::speed
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(speed_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(speed_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return from_string_list(speed_strings, phys); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(speed_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return speed_values.size() - 1; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(speed_rs.get()); }
     },
     {   // ConvertTags::delay_fade_length
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(delay_fade_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(delay_fade_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return from_string_list(delay_fade_len_strings, phys); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(delay_fade_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return delay_fade_len_values.size() - 1; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(delay_fade_rs.get()); }
     },
     {   // ConvertTags::step_count
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(step_count_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(step_count_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return display_string(step_count_rs.get(), phys, 0); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(step_count_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return ptb_rs::to_physical(step_count_rs.get(), 1.)
-                                                  - ptb_rs::to_physical(step_count_rs.get(), 0.); }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(step_count_rs.get());; }
     },
     {   // ConvertTags::mono_stereo
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(mono_mode_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(mono_mode_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return from_string_list(mono_mode_strings, phys); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(mono_mode_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return mono_mode_strings.size() - 1; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(mono_mode_rs.get()); }
     },
     {   // ConvertTags::sync_mode
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(sync_mode_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(sync_mode_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return from_string_list(sync_mode_strings, phys); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(sync_mode_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return sync_mode_strings.size() - 1; }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(sync_mode_rs.get()); }
     },
     {   // ConvertTags::step_pos
         /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(step_pos_rs.get(), norm); },
         /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(step_pos_rs.get(), phys); },
         /*to_string     = */ [](real phys) { return display_string(step_pos_rs.get(), phys, 0); },
         /*from_string   = */ [](string s) { return ptb_rs::from_string(step_pos_rs.get(), s.data()); },
-        /*num_steps     = */ []() -> i32   { return ptb_rs::to_physical(step_pos_rs.get(), 1.)
-                                                  - ptb_rs::to_physical(step_pos_rs.get(), 0.); }
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(step_pos_rs.get()); }
     },
 }};
 #else
