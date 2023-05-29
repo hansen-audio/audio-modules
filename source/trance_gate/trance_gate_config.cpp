@@ -128,8 +128,8 @@ static ConverterPtr step_pos_rs (ptb_rs::new_linear(1., 32., true));
 static std::string display_string(ptb_rs::Converter* converter, real phys, i32 precision) {
     static std::string output;
 
-    ptb_rs::to_string(converter, phys, precision, [](const uint8_t *s, int32_t len){
-        output.assign((const char*)s, len);
+    ptb_rs::to_string(converter, phys, precision, [](const char *s){
+        output.assign((const char*)s);
     });
 
     return output;
