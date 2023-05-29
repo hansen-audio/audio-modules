@@ -118,7 +118,7 @@ using ConverterPtr = std::unique_ptr<ptb_rs::Converter, ConverterDeleter>;
 
 static ConverterPtr percent_rs (ptb_rs::new_linear(0., 100., false));
 static ConverterPtr contour_rs (ptb_rs::new_log(4., 0.001, 0.25));
-static ConverterPtr speed_rs (ptb_rs::new_list(speed_values.size()));
+static ConverterPtr speed_rs (ptb_rs::new_list(speed_strings.size()));
 static ConverterPtr delay_fade_rs(ptb_rs::new_list(delay_fade_len_values.size()));
 static ConverterPtr step_count_rs (ptb_rs::new_linear(2., 32., true));
 static ConverterPtr mono_mode_rs (ptb_rs::new_list(mono_mode_strings.size()));
