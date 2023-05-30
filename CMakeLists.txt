@@ -33,7 +33,6 @@ target_link_libraries(audio-modules
         aligned-allocator
         fx-collection
         fx-collection-rs
-        param-tool-box
         param-tool-box-rs
 )
 
