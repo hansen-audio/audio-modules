@@ -115,14 +115,14 @@ struct ConverterDeleter {
 
 using ConverterPtr = std::unique_ptr<ptb_rs::Converter, ConverterDeleter>;
 
-static ConverterPtr percent_rs (ptb_rs::new_linear(0., 100., false));
+static ConverterPtr percent_rs (ptb_rs::new_linear(0., 100., ptb_rs::Kind::Float));
 static ConverterPtr contour_rs (ptb_rs::new_log(4., 0.001, 0.25));
 static ConverterPtr speed_rs (ptb_rs::new_list(speed_strings.size()));
 static ConverterPtr delay_fade_rs(ptb_rs::new_list(delay_fade_len_values.size()));
-static ConverterPtr step_count_rs (ptb_rs::new_linear(2., 32., true));
+static ConverterPtr step_count_rs (ptb_rs::new_linear(2., 32., ptb_rs::Kind::Int));
 static ConverterPtr mono_mode_rs (ptb_rs::new_list(mono_mode_strings.size()));
 static ConverterPtr sync_mode_rs (ptb_rs::new_list(sync_mode_strings.size()));
-static ConverterPtr step_pos_rs (ptb_rs::new_linear(1., 32., true));
+static ConverterPtr step_pos_rs (ptb_rs::new_linear(1., 32., ptb_rs::Kind::Int));
 
 static std::string display_string(ptb_rs::Converter* converter, real phys, i32 precision) {
     static std::string output;
