@@ -4,9 +4,9 @@
 #include "ha/audio_modules/convert_funcs.h"
 #include "ha/audio_modules/param_info.h"
 #include "ha/audio_modules/types.h"
-#include "ha/param_tool_box/convert/logarithmic.h"
-#include "ha/param_tool_box/convert/percent.h"
-#include "ha/param_tool_box/convert/string_list.h"
+#include "hao/param-tool-box-rs/cbindings.h"
+#include <algorithm>
+#include <memory>
 
 namespace ha::audio_modules::trance_gate {
 
@@ -96,122 +96,115 @@ static_assert(speed_values.size() == speed_strings.size());
 
 //-----------------------------------------------------------------------------
 // clang-format on
-using percent_type = ptb::convert::percent<mut_real>;
-using log_type     = ptb::convert::logarithmic<mut_real>;
-using lin_type     = ptb::convert::linear<mut_real>;
-using speed_type = ptb::convert::string_list<mut_real, decltype(speed_strings)>;
-using dly_fad_type =
-    ptb::convert::string_list<mut_real, decltype(delay_fade_len_strings)>;
-using mono_mode_type =
-    ptb::convert::string_list<mut_real, decltype(mono_mode_strings)>;
-using sync_mode_type =
-    ptb::convert::string_list<mut_real, decltype(sync_mode_strings)>;
-using on_off_type =
-    ptb::convert::string_list<mut_real, decltype(on_off_strings)>;
+
 using converter_list_type =
     std::array<const ConverterFuncs, Config::ConvertTags::count>;
 
-static percent_type const percent_converter;
-static log_type const contour_converter(4., 0.001, 0.25);
-static speed_type const speed_converter(speed_strings);
-static dly_fad_type const delay_fade_converter(delay_fade_len_strings);
-static lin_type const step_count_converter(2, 32);
-static lin_type const step_pos_converter(1, 32);
-static mono_mode_type const mono_mode_converter(mono_mode_strings);
-static on_off_type const on_off_converter(on_off_strings);
-static sync_mode_type const sync_mode_converter(sync_mode_strings);
+#define PARAM_TOOL_BOX_RS 1
 
 // clang-format off
+using namespace hao;
+namespace ptb_rs = param_tool_box_rs;
+
+struct ConverterDeleter {
+    void operator()(ptb_rs::Converter* c) 
+    { 
+        ptb_rs::delete_converter(c);
+    }
+};
+
+using ConverterPtr = std::unique_ptr<ptb_rs::Converter, ConverterDeleter>;
+
+static ConverterPtr percent_rs (ptb_rs::new_linear(0., 100., ptb_rs::Kind::Float));
+static ConverterPtr contour_rs (ptb_rs::new_log(4., 0.001, 0.25));
+static ConverterPtr speed_rs (ptb_rs::new_list(speed_strings.size()));
+static ConverterPtr delay_fade_rs(ptb_rs::new_list(delay_fade_len_values.size()));
+static ConverterPtr step_count_rs (ptb_rs::new_linear(2., 32., ptb_rs::Kind::Int));
+static ConverterPtr mono_mode_rs (ptb_rs::new_list(mono_mode_strings.size()));
+static ConverterPtr sync_mode_rs (ptb_rs::new_list(sync_mode_strings.size()));
+static ConverterPtr step_pos_rs (ptb_rs::new_linear(1., 32., ptb_rs::Kind::Int));
+
+static std::string display_string(ptb_rs::Converter* converter, real phys, i32 precision) {
+    static std::string output;
+
+    ptb_rs::to_string(converter, phys, precision, [](const char *s){
+        output.assign((const char*)s);
+    });
+
+    return output;
+}
+
+template <typename TStringList>
+static std::string from_string_list(const TStringList& string_list, real phys) {
+    auto i = static_cast<size_t>(phys);
+    i = std::clamp(i, size_t(0), string_list.size() - 1);
+    return string_list[i];
+}
+
 static converter_list_type const convert_list = {{
     {   // ConvertTags::normalised
         /*to_physical   = */ [](real norm) { return norm; },
         /*to_normalised = */ [](real phys) { return phys; },
         /*to_string     = */ [](real phys) { return std::to_string(phys); },
-        /*from_string   = */ [](string string) { return std::stof (string); },
+        /*from_string   = */ [](string s)  { return std::stof (s); },
         /*num_steps     = */ []() -> i32   { return 0; }
     },
     {   // ConvertTags::percent
-        /*to_physical   = */ [](real norm) { return percent_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return percent_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { 
-                auto precisionFunc = [](auto value) -> i32 {
-                return value < 100. ? 2 : 1;
-            };
-            return percent_converter.to_string(phys, precisionFunc); 
-        },
-        /*from_string   = */ [](string string) { return percent_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return 0; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(percent_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(percent_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return display_string(percent_rs.get(), phys, phys < 100. ? 2 : 1); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(percent_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(percent_rs.get()); }
     },
     {   // ConvertTags::contour
-        /*to_physical   = */ [](real norm) { return contour_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return contour_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) {
-            auto precisionFunc = [](decltype(contour_converter)::value_type) -> i32 {
-                return 3;
-            };
-            return contour_converter.to_string(phys, precisionFunc); 
-        },
-        /*from_string   = */ [](string string) { return contour_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return 0; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(contour_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(contour_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return display_string(contour_rs.get(), phys, 3); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(contour_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(contour_rs.get()); }
     },
     {   // ConvertTags::speed
-        /*to_physical   = */ [](real norm) { return speed_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return speed_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return speed_converter.to_string(phys); },
-        /*from_string   = */ [](string string) { return speed_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return speed_values.size() - 1; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(speed_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(speed_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return from_string_list(speed_strings, phys); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(speed_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(speed_rs.get()); }
     },
     {   // ConvertTags::delay_fade_length
-        /*to_physical   = */ [](real norm) { return delay_fade_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return delay_fade_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return delay_fade_converter.to_string(phys); },
-        /*from_string   = */ [](string string) { return delay_fade_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return delay_fade_len_values.size() - 1; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(delay_fade_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(delay_fade_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return from_string_list(delay_fade_len_strings, phys); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(delay_fade_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(delay_fade_rs.get()); }
     },
     {   // ConvertTags::step_count
-        /*to_physical   = */ [](real norm) { return step_count_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return step_count_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) {
-            using val_type = decltype(step_count_converter)::value_type;
-            auto precisionFunc = [](val_type) -> i32 {
-                return 0;
-            };
-            auto rounded = static_cast<val_type>(static_cast<i32>(phys));
-            return step_count_converter.to_string(rounded, precisionFunc);
-        },
-        /*from_string   = */ [](string string) { return step_count_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return step_count_converter.to_physical(1.)
-                                                    - step_count_converter.to_physical(0.); }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(step_count_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(step_count_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return display_string(step_count_rs.get(), phys, 0); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(step_count_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(step_count_rs.get());; }
     },
     {   // ConvertTags::mono_stereo
-        /*to_physical   = */ [](real norm) { return mono_mode_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return mono_mode_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return mono_mode_converter.to_string(phys); },
-        /*from_string   = */ [](string string) { return mono_mode_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return mono_mode_strings.size() - 1; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(mono_mode_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(mono_mode_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return from_string_list(mono_mode_strings, phys); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(mono_mode_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(mono_mode_rs.get()); }
     },
     {   // ConvertTags::sync_mode
-        /*to_physical   = */ [](real norm) { return sync_mode_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return sync_mode_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) { return sync_mode_converter.to_string(phys); },
-        /*from_string   = */ [](string string) { return sync_mode_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return sync_mode_strings.size() - 1; }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(sync_mode_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(sync_mode_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return from_string_list(sync_mode_strings, phys); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(sync_mode_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(sync_mode_rs.get()); }
     },
     {   // ConvertTags::step_pos
-        /*to_physical   = */ [](real norm) { return step_pos_converter.to_physical(norm); },
-        /*to_normalised = */ [](real phys) { return step_pos_converter.to_normalized(phys); },
-        /*to_string     = */ [](real phys) {
-            using val_type = decltype(step_pos_converter)::value_type;
-            auto precisionFunc = [](val_type) -> i32 {
-                return 0;
-            };
-            auto rounded = static_cast<val_type>(static_cast<i32>(phys));
-            return step_pos_converter.to_string(rounded, precisionFunc);
-        },
-        /*from_string   = */ [](string string) { return step_pos_converter.from_string(string); },
-        /*num_steps     = */ []() -> i32   { return step_pos_converter.to_physical(1.)
-                                                  - step_pos_converter.to_physical(0.); }
-    }
+        /*to_physical   = */ [](real norm) { return ptb_rs::to_physical(step_pos_rs.get(), norm); },
+        /*to_normalised = */ [](real phys) { return ptb_rs::to_normalized(step_pos_rs.get(), phys); },
+        /*to_string     = */ [](real phys) { return display_string(step_pos_rs.get(), phys, 0); },
+        /*from_string   = */ [](string s)  { return ptb_rs::from_string(step_pos_rs.get(), s.data()); },
+        /*num_steps     = */ []() -> i32   { return ptb_rs::num_steps(step_pos_rs.get()); }
+    },
 }};
 // clang-format on
 

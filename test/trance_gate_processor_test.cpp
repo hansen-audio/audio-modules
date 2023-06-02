@@ -102,7 +102,7 @@ TEST(audio_modules_factory_test, test_trance_gate_mod_infos)
 }
 
 //-----------------------------------------------------------------------------
-TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
+TEST(audio_modules_factory_test, test_trance_gate_step_count_converter)
 {
     using amf = audio_modules::ModuleFactoryImpl;
     const auto mod_infos =
@@ -116,6 +116,37 @@ TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
     int const rounded = static_cast<int>(phys);
     int rounded_2     = phys;
     EXPECT_TRUE(rounded == 2);
+
+    auto const converter_percent =
+        converters.at(audio_modules::trance_gate::Config::ConvertTags::percent);
+
+    float phys_rs = converter_percent.to_physical(0.25);
+    EXPECT_TRUE(phys_rs == 25);
+
+    float norm_rs = converter_percent.to_normalised(75);
+    EXPECT_TRUE(norm_rs == 0.75);
+
+    std::string display = converter_percent.to_string(75);
+    EXPECT_TRUE(display == "75.00");
+
+    auto from_display = converter_percent.from_string("66");
+    EXPECT_TRUE(from_display == 66);
+}
+
+//-----------------------------------------------------------------------------
+TEST(audio_modules_factory_test, test_trance_gate_contour_converter)
+{
+    using amf = audio_modules::ModuleFactoryImpl;
+    const auto mod_infos =
+        amf::param_infos(audio_modules::ModuleTags::TranceGate);
+    const auto converters =
+        amf::convert_funcs(audio_modules::ModuleTags::TranceGate);
+    auto const converter =
+        converters.at(audio_modules::trance_gate::Config::ConvertTags::contour);
+
+    EXPECT_FLOAT_EQ(converter.to_physical(0.25), 0.665277243);
+    EXPECT_FLOAT_EQ(converter.to_physical(0.5), 0.250000238);
+    EXPECT_FLOAT_EQ(converter.to_physical(0.75), 0.0875945091);
 }
 
 //-----------------------------------------------------------------------------
