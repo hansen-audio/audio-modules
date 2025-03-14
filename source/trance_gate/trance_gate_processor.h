@@ -9,7 +9,7 @@
 
 #define USE_FX_COLLECTION_RS 1
 #if USE_FX_COLLECTION_RS
-#include "ha/fx-collection-rs/cbindings.h"
+#include "hao/fx-collection-rs/cbindings.h"
 #endif
 
 namespace ha::audio_modules::trance_gate {
