@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <memory>
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 // clang-format off
@@ -231,4 +231,4 @@ real Config::get_delay_fade_len(real value)
 }
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

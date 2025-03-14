@@ -12,7 +12,7 @@
 #include "hao/fx-collection-rs/cbindings.h"
 #endif
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 /**
@@ -30,8 +30,8 @@ struct TranceGateModule
 #if USE_FX_COLLECTION_RS
     fx_collection_rs::TranceGate* trance_gate_fx = nullptr;
 #else
-    fx_collection::TranceGate trance_gate_fx =
-        fx_collection::TranceGateImpl::create();
+    ha::fx_collection::TranceGate trance_gate_fx =
+        ha::fx_collection::TranceGateImpl::create();
 #endif
 };
 
@@ -53,4 +53,4 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

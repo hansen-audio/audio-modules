@@ -4,7 +4,7 @@
 #include <cmath>
 #include <cstddef>
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 SilenceDetection SilenceDetectionImpl::create(real sample_rate,
@@ -16,14 +16,14 @@ SilenceDetection SilenceDetectionImpl::create(real sample_rate,
 
 //-----------------------------------------------------------------------------
 bool SilenceDetectionImpl::process(Self& self,
-                                   fx_collection::AudioFrame const& frame)
+                                   ha::fx_collection::AudioFrame const& frame)
 {
     constexpr auto THRESHOLD = 1e-9f;
 
     // Increment the silence counter...
     self.frames_of_silence++;
 
-    fx_collection::AudioFrame sum{real(0.)};
+    ha::fx_collection::AudioFrame sum{real(0.)};
     for (std::size_t s = 0; s < frame.data.size(); ++s)
     {
         sum.data[s] += std::abs(frame.data[s]);
@@ -40,4 +40,4 @@ bool SilenceDetectionImpl::process(Self& self,
 }
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

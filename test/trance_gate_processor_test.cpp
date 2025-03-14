@@ -7,7 +7,7 @@
 #include "trance_gate/trance_gate_config.h"
 #include "trance_gate/trance_gate_processor.h"
 
-using namespace ha;
+using namespace hao;
 
 namespace {
 

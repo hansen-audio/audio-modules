@@ -5,7 +5,7 @@
 #include "hao/audio_modules/types.h"
 #include "ha/fx_collection/types.h"
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 
 /**
  * @brief SilenceDetection
@@ -27,8 +27,8 @@ struct SilenceDetectionImpl final
 
     static Self create(real sample_rate, real duration_in_seconds);
     static bool process(Self& silence_detection,
-                        fx_collection::AudioFrame const& frame);
+                        ha::fx_collection::AudioFrame const& frame);
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

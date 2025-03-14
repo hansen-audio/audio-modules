@@ -4,7 +4,7 @@
 
 #include "hao/audio_modules/types.h"
 
-namespace ha::audio_modules {
+namespace hao::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -25,4 +25,4 @@ struct ParamInfo
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules
+} // namespace hao::audio_modules

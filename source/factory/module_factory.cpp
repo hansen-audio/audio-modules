@@ -4,7 +4,7 @@
 #include "trance_gate/trance_gate_config.h"
 #include "trance_gate/trance_gate_processor.h"
 
-namespace ha::audio_modules {
+namespace hao::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -69,4 +69,4 @@ audio_module_ptr ModuleFactoryImpl::create_audio_module(ModuleTags tag)
 }
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules
+} // namespace hao::audio_modules

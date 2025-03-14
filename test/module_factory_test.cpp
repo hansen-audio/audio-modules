@@ -4,7 +4,7 @@
 
 #include "hao/audio_modules/audio_modules.h"
 
-using namespace ha;
+using namespace hao;
 
 namespace {
 

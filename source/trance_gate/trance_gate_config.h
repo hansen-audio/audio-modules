@@ -6,7 +6,7 @@
 #include <array>
 #include <functional>
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 
 //-----------------------------------------------------------------------------
 /**
@@ -294,4 +294,4 @@ struct Config
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

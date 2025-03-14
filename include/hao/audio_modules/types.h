@@ -8,7 +8,7 @@
 #include <string_view>
 #include <vector>
 
-namespace ha::audio_modules {
+namespace hao::audio_modules {
 
 //------------------------------------------------------------------------
 using i32     = std::int32_t const;
@@ -35,10 +35,10 @@ using ConvertFuncsList = std::vector<struct ConverterFuncs>;
 
 using sample = mut_real;
 
-using allocator_r16 = alignment::aligned_allocator<sample, 16>;
+using allocator_r16 = ha::alignment::aligned_allocator<sample, 16>;
 using AudioChannel  = std::vector<sample, allocator_r16>;
 using AudioBus      = std::vector<AudioChannel>;
 using AudioBusses   = std::vector<AudioBus>;
 
 //------------------------------------------------------------------------
-} // namespace ha::audio_modules
+} // namespace hao::audio_modules
