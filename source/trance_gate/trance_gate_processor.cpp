@@ -5,7 +5,7 @@
 #include "trance_gate_config.h"
 #include <cassert>
 
-namespace ha::audio_modules::trance_gate {
+namespace hao::audio_modules::trance_gate {
 namespace {
 
 //-----------------------------------------------------------------------------
@@ -14,8 +14,8 @@ namespace TranceGateImpl = fx_collection_rs;
 using TranceGateFx       = fx_collection_rs::TranceGate;
 using AudioFrame         = fx_collection_rs::AudioFrame;
 #else
-using TranceGateImpl = fx_collection::TranceGateImpl;
-using TranceGateFx   = fx_collection::TranceGate;
+using TranceGateImpl = ha::fx_collection::TranceGateImpl;
+using TranceGateFx   = ha::fx_collection::TranceGate;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -202,9 +202,9 @@ void update_parameters(ProcessData::param_changes const& param_ins,
 //-----------------------------------------------------------------------------
 bool is_silent_input(ProcessData& data, SilenceDetection& silence_detection)
 {
-    using AudioFrame = fx_collection::AudioFrame;
+    using AudioFrame = ha::fx_collection::AudioFrame;
 
-    AudioFrame frame = fx_collection::zero_audio_frame;
+    AudioFrame frame = ha::fx_collection::zero_audio_frame;
     bool is_silent   = false;
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
@@ -258,8 +258,8 @@ void process_audio_buffers(
     };
     AudioFrameType frame;
 #else
-    using AudioFrame = fx_collection::AudioFrame;
-    AudioFrame frame = fx_collection::zero_audio_frame;
+    using AudioFrame = ha::fx_collection::AudioFrame;
+    AudioFrame frame = ha::fx_collection::zero_audio_frame;
 #endif
     for (mut_i32 s = 0; s < data.num_samples; ++s)
     {
@@ -407,4 +407,4 @@ void TranceGateModuleImpl::update_param(tag_type param_tag, real value)
 }
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules::trance_gate
+} // namespace hao::audio_modules::trance_gate

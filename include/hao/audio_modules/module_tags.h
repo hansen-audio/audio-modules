@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace ha::audio_modules {
+namespace hao::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -14,4 +14,4 @@ enum class ModuleTags
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules
+} // namespace hao::audio_modules

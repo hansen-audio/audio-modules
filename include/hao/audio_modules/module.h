@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-namespace ha::audio_modules {
+namespace hao::audio_modules {
 
 //-----------------------------------------------------------------------------
 /**
@@ -58,4 +58,4 @@ struct ModuleImpl
 };
 
 //-----------------------------------------------------------------------------
-} // namespace ha::audio_modules
+} // namespace hao::audio_modules
