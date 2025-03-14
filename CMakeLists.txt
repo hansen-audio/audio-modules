@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14.0)
+cmake_minimum_required(VERSION 3.20.0)
 
 project(ha-audio-modules)
 
@@ -32,8 +32,8 @@ target_link_libraries(audio-modules
     PRIVATE
         aligned-allocator
         fx-collection
-        fx-collection-rs
-        param-tool-box-rs
+        fx_collection_rs
+        param_tool_box_rs
 )
 
 target_compile_features(audio-modules
@@ -61,7 +61,7 @@ target_link_libraries(audio-modules_test
         aligned-allocator
         audio-modules
         fx-collection
-        fx-collection-rs
+        fx_collection_rs
         gtest
         gtest_main
 )

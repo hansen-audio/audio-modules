@@ -8,14 +8,11 @@ FetchContent_Declare(
     GIT_TAG main
 )
 
-FetchContent_GetProperties(param-tool-box-rs)
-if(NOT fx-collection-rs_POPULATED)
-    FetchContent_Populate(param-tool-box-rs)
-endif()
+FetchContent_MakeAvailable(param-tool-box-rs)
 
 corrosion_import_crate(MANIFEST_PATH ${param-tool-box-rs_SOURCE_DIR}/Cargo.toml)
 
-target_include_directories(param-tool-box-rs 
+target_include_directories(param_tool_box_rs 
     INTERFACE 
         ${param-tool-box-rs_SOURCE_DIR}/include
 )

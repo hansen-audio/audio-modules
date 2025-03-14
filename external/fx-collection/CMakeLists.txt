@@ -4,7 +4,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     ha-fx-collection
-    GIT_REPOSITORY ${HA_GIT_REPOSITORY_URL}/hansen-audio/fx-collection.git
+    GIT_REPOSITORY https://github.com/hansen-audio/fx-collection.git
     GIT_TAG master
 )
 
