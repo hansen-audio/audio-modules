@@ -1,9 +1,9 @@
 // Copyright(c) 2021 Hansen Audio.
 
 #include "trance_gate_config.h"
-#include "ha/audio_modules/convert_funcs.h"
-#include "ha/audio_modules/param_info.h"
-#include "ha/audio_modules/types.h"
+#include "hao/audio_modules/convert_funcs.h"
+#include "hao/audio_modules/param_info.h"
+#include "hao/audio_modules/types.h"
 #include "hao/param-tool-box-rs/cbindings.h"
 #include <algorithm>
 #include <memory>

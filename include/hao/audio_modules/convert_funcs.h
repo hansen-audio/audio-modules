@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ha/audio_modules/types.h"
+#include "hao/audio_modules/types.h"
 #include <functional>
 
 namespace ha::audio_modules {

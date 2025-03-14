@@ -1,7 +1,7 @@
 // Copyright(c) 2021 Hansen Audio.
 
 #include "trance_gate_processor.h"
-#include "ha/audio_modules/convert_funcs.h"
+#include "hao/audio_modules/convert_funcs.h"
 #include "trance_gate_config.h"
 #include <cassert>
 

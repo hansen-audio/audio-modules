@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-project(ha-audio-modules)
+project(hao-audio-modules)
 
 add_subdirectory(external)
 
 add_library(audio-modules STATIC
-    include/ha/audio_modules/module.h
-    include/ha/audio_modules/audio_modules.h
-    include/ha/audio_modules/convert_funcs.h
-    include/ha/audio_modules/module_factory.h
-    include/ha/audio_modules/module_tags.h
-    include/ha/audio_modules/param_info.h
-    include/ha/audio_modules/types.h
+    include/hao/audio_modules/module.h
+    include/hao/audio_modules/audio_modules.h
+    include/hao/audio_modules/convert_funcs.h
+    include/hao/audio_modules/module_factory.h
+    include/hao/audio_modules/module_tags.h
+    include/hao/audio_modules/param_info.h
+    include/hao/audio_modules/types.h
     source/factory/module_factory.cpp
     source/trance_gate/trance_gate_config.cpp
     source/trance_gate/trance_gate_config.h

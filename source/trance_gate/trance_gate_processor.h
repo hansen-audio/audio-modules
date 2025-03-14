@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "ha/audio_modules/module.h"
-#include "ha/audio_modules/types.h"
+#include "hao/audio_modules/module.h"
+#include "hao/audio_modules/types.h"
 #include "ha/fx_collection/trance_gate.h"
 #include "silence_detection.h"
 

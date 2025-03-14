@@ -1,6 +1,6 @@
 // Copyright(c) 2021 Hansen Audio.
 
-#include "ha/audio_modules/module_factory.h"
+#include "hao/audio_modules/module_factory.h"
 #include "trance_gate/trance_gate_config.h"
 #include "trance_gate/trance_gate_processor.h"
 

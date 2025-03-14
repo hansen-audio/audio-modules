@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ha/audio_modules/param_info.h"
+#include "hao/audio_modules/param_info.h"
 #include <array>
 #include <functional>
 

@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "ha/audio_modules/audio_modules.h"
+#include "hao/audio_modules/audio_modules.h"
 
 using namespace ha;
 

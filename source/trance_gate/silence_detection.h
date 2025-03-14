@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ha/audio_modules/types.h"
+#include "hao/audio_modules/types.h"
 #include "ha/fx_collection/types.h"
 
 namespace ha::audio_modules::trance_gate {

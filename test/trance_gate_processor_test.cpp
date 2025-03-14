@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "ha/audio_modules/audio_modules.h"
+#include "hao/audio_modules/audio_modules.h"
 #include "thread_malloc_detector.h"
 #include "trance_gate/trance_gate_config.h"
 #include "trance_gate/trance_gate_processor.h"
