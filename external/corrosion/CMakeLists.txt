@@ -5,7 +5,6 @@ include(FetchContent)
 FetchContent_Declare(
     Corrosion
     GIT_REPOSITORY https://github.com/AndrewGaspar/corrosion.git
-    GIT_TAG v0.5.1
-)
+    GIT_TAG master
 
 FetchContent_MakeAvailable(Corrosion)
